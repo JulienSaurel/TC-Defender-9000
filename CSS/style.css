@@ -10,6 +10,17 @@ html, body {
   font-size: 95%;
 }
 
+#startScreen {
+  margin-top: 500px;
+    position: relative;
+    text-align: center;
+}
+
+#startButton {
+  margin-top: 25px;
+  width:100px;
+}
+
 #gameScreen {
   position:absolute;
   display: block;

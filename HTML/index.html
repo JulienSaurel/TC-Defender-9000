@@ -6,48 +6,54 @@
       <link rel="stylesheet" type="text/css" href="../CSS/style.css">
   </head>
   <body>
-    <div>
-      <canvas id="gameScreen" width="600" height="600"></canvas>
-      <canvas id="canonCanvas" width="600" height="600"></canvas>
+    <div id="startScreen">
+      <h1> PRESS + TO START</h1>
+      <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
     </div>
-    <div id="gameInfos">
-      <div id="titleDiv">
-        <p id="infoTitle">Caractéristiques :</p>
+    <div id="game">
+      <div>
+        <canvas id="gameScreen" width="600" height="600"></canvas>
+        <canvas id="canonCanvas" width="600" height="600"></canvas>
       </div>
-      <p id="statusPoints">Points disponibles : 0 SP</p>
-      <hr>
-      <div id="caracs">
-        <div class="canonCaracs">
-          <div class="left">
-            <p id="str">Strength : 1 / 3</p>
-            <p id="strCost">Cost : 75 SP</p>
-          </div>
-          <div class="right">
-            <img onclick="buttonSTR()" class="plusButton" src="../img/plusButton.png">
-          </div>
+      <div id="gameInfos">
+        <div id="titleDiv">
+          <p id="infoTitle">Caractéristiques :</p>
         </div>
+        <p id="statusPoints">Points disponibles : 0 SP</p>
         <hr>
-        <div class="canonCaracs">
-          <div class="left">
-            <p id="rt">Reload Time : 0 / 3</p>
-            <p id="rtCost">Cost : 50 SP</p>
+        <div id="caracs">
+          <div class="canonCaracs">
+            <div class="left">
+              <p id="str">Strength : 1 / 3</p>
+              <p id="strCost">Cost : 75 SP</p>
+            </div>
+            <div class="right">
+              <img onclick="buttonSTR()" class="plusButton" src="../img/plusButton.png">
+            </div>
           </div>
-          <div class="right">
-            <img onclick="buttonAS()" class="plusButton" src="../img/plusButton.png">
+          <hr>
+          <div class="canonCaracs">
+            <div class="left">
+              <p id="rt">Reload Time : 0 / 3</p>
+              <p id="rtCost">Cost : 50 SP</p>
+            </div>
+            <div class="right">
+              <img onclick="buttonAS()" class="plusButton" src="../img/plusButton.png">
+            </div>
           </div>
-        </div>
-        <hr>
-        <div class="canonCaracs">
-          <div class="left">
-            <p id="ss">Shot speed : 0 / 5</p>
-            <p id="ssCost">Cost : 10 SP</p>
-          </div>
-          <div class="right">
-            <img onclick="buttonSS()" class="plusButton" src="../img/plusButton.png">
+          <hr>
+          <div class="canonCaracs">
+            <div class="left">
+              <p id="ss">Shot speed : 0 / 5</p>
+              <p id="ssCost">Cost : 10 SP</p>
+            </div>
+            <div class="right">
+              <img onclick="buttonSS()" class="plusButton" src="../img/plusButton.png">
+            </div>
           </div>
         </div>
       </div>
-    </div>
+   </div>
   </body>
 </html>
 

@@ -739,5 +739,16 @@ function render(){
     draw();
   }, 10);
 }
-initialise();
-render();
+// initialise();
+// render();
+
+var game = document.getElementById("game");
+game.style.display="none";
+
+function startButton(){
+    var start = document.getElementById("startScreen");
+    start.style.display="none";
+    game.style.display="inline";
+    initialise();
+    render();
+}
