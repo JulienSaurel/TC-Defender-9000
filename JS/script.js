@@ -238,6 +238,72 @@ canon = {
   },
 }
 
+canonLeft = {
+  x: 50, // coordonnée X du canon
+  y: 50, // coordonnée Y du canon
+  width: CANON_WIDTH, // largeur du canon
+  height: CANON_HEIGHT, // hauteur du canon
+  angle: 0, //orientation du canon
+  canShoot: true, //variable vérifiant si le canon est en rechargement
+  lvl: 1,
+  sprite: canonASprite,
+  // fonction qui dessine le canon
+  draw: function(){
+    //on dessine le canon
+    contextCanon.drawImage(canon.sprite, this.x, this.y, this.width, this.height);
+
+    //on réinitialiser l'orientation du canvas du canon
+    contextCanon.setTransform(1, 0, 0, 1, 0, 0);
+
+    //on déplace le canvas aux coordonnée du centre du canon
+    contextCanon.translate((CANON_X + CANON_WIDTH / 2), (CANON_Y + CANON_HEIGHT / 2));
+
+    //on effectue une rotation selon l'angle
+    contextCanon.rotate(canon.angle);
+
+    // on effectue la translation inverse
+    contextCanon.translate(-(CANON_X + CANON_WIDTH / 2), -(CANON_Y + CANON_HEIGHT / 2));
+  },
+
+  //fonction permettant d'actualiser les données du canon
+  update: function(){
+    if(canon.lvl === 1){
+      canon.sprite = canonASprite;
+    }else if(canon.lvl === 2){
+      canon.sprite = canonBSprite;
+    }else if(canon.lvl === 3){
+      canon.sprite = canonCSprite;
+    }else{
+      canon.sprite = canonDSprite;
+    }
+  },
+
+  //fonction permettant au canon de tirer
+  shoot: function(e){
+    //on vérifie que le canon puisse tirer
+    if(canon.canShoot === true){
+      //on dit que le canon ne peut plus tirer
+      canon.canShoot = false;
+
+      //on enregistre les coordonnée du click de souris
+      let mouseClickX = e.clientX - window.innerWidth * 0.125;
+      let mouseClickY = e.clientY;
+
+      //on créer un point en fonction de ces coordonnées
+      pointDest = {x: mouseClickX, y: mouseClickY};
+
+      //on instancie une nouvelle bullet à l'aide de ce point
+      bullets.push(new Bullet(pointDest));
+
+
+      //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
+      setTimeout(function(){
+        canon.canShoot = true;
+      }, reloadTime);
+    }
+  },
+}
+
 
 microWave = {
   x: microWave_X,
