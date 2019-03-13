@@ -33,6 +33,12 @@ var ENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY; //hauteur d'un ennemi
 var ENNEMY_SPEED = (axeX / 12) / 50; //vitesse d'un ennemi
 var ennemies = Array(); //tableau contenant tous les ennemis
 
+//micro onde
+var microWave_WIDTH = 1 / 12 * axeX;
+var microWave_HEIGHT = 1 / 12 * axeY;
+var microWave_X = 0 / 12 * axeX;
+var microWave_Y = 3 / 12 * axeY;
+
 //sprites
 var bulletSprite = new Image(); //sprite d'une bullet
 var canonASprite = new Image(); //sprite du canon lvl 1
@@ -45,6 +51,7 @@ var tcTwoASprite = new Image(); //sprite du TC lvl 2 tourné dans un sens
 var tcTwoBSprite = new Image(); //sprite du TC lvl 2 tourné dans l'autre sens
 var tcThreeASprite = new Image(); //sprite du TC lvl 3 tourné dans un sens
 var tcThreeBSprite = new Image(); //sprite du TC lvl 3 tourné dans l'autre sens
+var microWaveSprite = new Image();
 
 //position de la souris
 var angle; //angle (en rad) entre le centre du canon et la position de la souris (recalculé en permanence)
@@ -81,6 +88,7 @@ function loadImages(){
   tcTwoBSprite.src = "../img/TC2_B.png";
   tcThreeASprite.src = "../img/TC3_A.png";
   tcThreeBSprite.src = "../img/TC3_B.png";
+  microWaveSprite.src = "../img/micro_onde.png";
 }
 
 //fonction appelée au lancement
@@ -228,6 +236,30 @@ canon = {
       }, reloadTime);
     }
   },
+}
+
+
+microWave = {
+  x: microWave_X,
+  y: microWave_Y,
+  width: microWave_WIDTH,
+  height: microWave_HEIGHT,
+  sprite: microWaveSprite,
+
+  update: function(){
+    microWave_WIDTH = 1 / 12 * axeX;
+    microWave.width = microWave_WIDTH;
+    microWave_HEIGHT = 1 / 12 * axeY;
+    microWave.height = microWave_HEIGHT;
+    microWave_X = 3 / 12 * axeX;
+    microWave.x = microWave_X;
+    microWave_Y = 5.25 / 12 * axeY;
+    microWave.y = microWave_Y;
+  },
+
+  draw: function(){
+    context.drawImage(microWave.sprite, microWave.x, microWave.y, microWave.width, microWave.height);
+  }
 }
 
 //fonction permettant d'actualiser les caractéristiques du canon après un changement de taille de l'écran
@@ -675,6 +707,7 @@ function afficherStatusPoints(){
 function update(){
   garbageCollector();
   actualiseStatusPoints();
+  microWave.update();
   if(winDetector() === true){
     alert("ok");
     clearInterval(interval);
@@ -701,6 +734,7 @@ function update(){
 function draw(){
   context.clearRect(0, 0, canvas.width, canvas.height);
   contextCanon.clearRect(0, 0, canvas.width, canvas.height);
+  microWave.draw();
   bullets.forEach(function(bullet){
     if(bullet != undefined){
       if(!bullet.launched){
