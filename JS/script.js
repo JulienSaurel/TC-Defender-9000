@@ -34,10 +34,10 @@ var ENNEMY_SPEED = (axeX / 12) / 50; //vitesse d'un ennemi
 var ennemies = Array(); //tableau contenant tous les ennemis
 
 //micro onde
-var microWave_WIDTH = 1 / 12 * axeX;
-var microWave_HEIGHT = 1 / 12 * axeY;
-var microWave_X = 0 / 12 * axeX;
-var microWave_Y = 3 / 12 * axeY;
+var microWave_WIDTH = 0.925 / 12 * axeX;
+var microWave_HEIGHT = 0.925 / 12 * axeY;
+var microWave_X = 3.15 / 12 * axeX;
+var microWave_Y = 4.95 / 12 * axeY;
 
 //sprites
 var bulletSprite = new Image(); //sprite d'une bullet
@@ -313,13 +313,13 @@ microWave = {
   sprite: microWaveSprite,
 
   update: function(){
-    microWave_WIDTH = 1 / 12 * axeX;
+    microWave_WIDTH = 0.925 / 12 * axeX;
     microWave.width = microWave_WIDTH;
-    microWave_HEIGHT = 1 / 12 * axeY;
+    microWave_HEIGHT = 0.925 / 12 * axeY;
     microWave.height = microWave_HEIGHT;
-    microWave_X = 3 / 12 * axeX;
+    microWave_X = 3.15 / 12 * axeX;
     microWave.x = microWave_X;
-    microWave_Y = 5.25 / 12 * axeY;
+    microWave_Y = 4.95 / 12 * axeY;
     microWave.y = microWave_Y;
   },
 
@@ -340,6 +340,7 @@ function replaceCanon(){
 function replaceEnnemies(){
   ENNEMY_WIDTH = (1 / 12) * 0.625 * axeX;
   ENNEMY_HEIGHT = (1 / 12) * 0.625 * axeY;
+  ENNEMY_SPEED = (axeX / 12) / 50;
   ennemies.forEach(function(ennemy){
     if(ennemy != undefined){
       ennemy.width = ENNEMY_WIDTH;
