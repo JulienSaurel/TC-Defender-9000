@@ -14,18 +14,14 @@ html, body {
   position:absolute;
   display: block;
   margin: auto;
+  z-index: 1;
 }
 
-#startScreen {
-  height: 100%;
-  margin-top: 20%;
-    position: relative;
-    text-align: center;
-}
 
 #startButton {
   margin-top: 25px;
   width:100px;
+  z-index: 10;
 }
 
 #gameScreen {

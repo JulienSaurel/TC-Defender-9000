@@ -27,7 +27,7 @@ var reloadTime = 500; //temps de rechargement (en ms) du tir
 var bullet_damages = 1;
 var bullets = Array(); //tableau contenant toutes les bullet tirées
 
-//ennemies
+<//ennemies
 var ENNEMY_WIDTH = (1 / 12) * 0.5 * axeX; //largeur d'un ennemi
 var ENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY; //hauteur d'un ennemi
 var ENNEMY_SPEED = (axeX / 12) / 50; //vitesse d'un ennemi
@@ -245,7 +245,7 @@ canonLeft = {
   height: CANON_HEIGHT, // hauteur du canon
   angle: 0, //orientation du canon
   canShoot: true, //variable vérifiant si le canon est en rechargement
-  lvl: 1,
+  lvl: 1 ,
   sprite: canonASprite,
   // fonction qui dessine le canon
   draw: function(){
