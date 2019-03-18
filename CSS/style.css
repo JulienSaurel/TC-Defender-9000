@@ -19,6 +19,7 @@ html, body {
 
 
 #startButton {
+    position: absolute;
   margin-top: 25px;
   width:100px;
   z-index: 10;
