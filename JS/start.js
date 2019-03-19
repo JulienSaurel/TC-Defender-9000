@@ -4,31 +4,57 @@ var canvasCanonLeft = document.getElementById("canonLeft");
 var contextCanonLeft = canvasCanonLeft.getContext("2d");
 var canvasCanonRight = document.getElementById("canonRight");
 var contextCanonRight = canvasCanonRight.getContext("2d");
-
+initCanvas();
 var axeX2 = startCanvas.width;
 var axeY2 = startCanvas.height;
 
-renderMainMenu = true;
+var axeCNDX = canvasCanonRight.width;
+var axeCNDY = canvasCanonRight.height;
+
+var axeCNGX = canvasCanonLeft.width;
+var axeCNGY = canvasCanonLeft.height;
+
+var renderMainMenu = true;
+
+var mouseAngleA;
+var mouseAngleB;
 
 //canon gauche du start
-var CANONG_WIDTH = axeX / 4; //Largeur du canon
-var CANONG_HEIGHT = axeY / 4; //Hauteur du canon
-var CANONG_X = (axeX / 4) - (CANONG_WIDTH / 2); //coordonnée X du canon
-var CANONG_Y = (axeY / 4) - (CANONG_HEIGHT / 2); //coordonnée Y du canon
+var CANONG_WIDTH = axeCNGX / 2; //Largeur du canon
+var CANONG_HEIGHT = axeCNGY / 2; //Hauteur du canon
+var CANONG_X = (axeCNGX / 2) - (CANONG_WIDTH / 2); //coordonnée X du canon
+var CANONG_Y = (axeCNGY / 2) - (CANONG_HEIGHT / 2); //coordonnée Y du canon
 
 //canon droite du start
-var CANOND_WIDTH = axeX / 4; //Largeur du canon
-var CANOND_HEIGHT = axeY / 4; //Hauteur du canon
-var CANOND_X = (axeX / 4)*3 + (CANOND_WIDTH / 2); //coordonnée X du canon
-var CANOND_Y = (axeY / 4) - (CANOND_HEIGHT / 2); //coordonnée Y du canon
+var CANOND_WIDTH = axeCNDX / 2; //Largeur du canon
+var CANOND_HEIGHT = axeCNDY / 2; //Hauteur du canon
+var CANOND_X = (axeCNDX / 2) - (CANOND_WIDTH / 2); //coordonnée X du canon
+var CANOND_Y = (axeCNDY / 2) - (CANOND_HEIGHT / 2); //coordonnée Y du canon
 
 //ennemi du start screen
-var SENNEMY_WIDTH = (1 / 12) * 0.5 * axeX; //largeur
-var SENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY; //hauteur
+var SENNEMY_WIDTH = (1 / 12) * 0.5 * axeX2; //largeur
+var SENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY2; //hauteur
 var SENNEMY_SPEED = 0; //vitesse
 var ennemies = Array(); //tableau contenant tous les ennemis
 
+function angleCalculator(ev){
+	let mX = axeX2 / 2;
+	let mY = ev.clientY;
+
+	let aX = axeX2 / 4;
+	let aY = axeY2 / 2;
+
+	let bX = (3 * axeX2) / 4;
+	let bY = axeY2 / 2;
+
+	let angleB = Math.atan2((mY - bY), (mX - bX));
+
+	mouseAngleB = angleB + 1.5708;
+	mouseAngleA = - mouseAngleB - 1.5708;
+}
+
 function initCanvas(){
+	document.addEventListener("mousemove", angleCalculator, false);
 	startCanvas.style.left = 0 + "px";
 	startCanvas.width = window.innerWidth;
   startCanvas.height = window.innerWidth * 0.5;
@@ -39,12 +65,16 @@ function initCanvas(){
 	canvasCanonRight.width = window.innerWidth * 0.5;
   canvasCanonRight.height = window.innerWidth * 0.5;
 
-  var axeX2 = startCanvas.width;
-	var axeY2 = startCanvas.height;
-	CANONG_WIDTH = axeX / 4;
-  CANONG_HEIGHT = axeY / 4;
-  CANONG_X = (axeX / 2) - (CANONG_WIDTH / 2);
-  CANONG_Y = (axeY / 2) - (CANONG_HEIGHT / 2);
+	CANONG_WIDTH = axeCNGX / 2;
+  CANONG_HEIGHT = axeCNGY / 2;
+	CANOND_WIDTH = axeCNGX / 2;
+  CANOND_HEIGHT = axeCNGY / 2;
+  CANONG_X = (axeCNGX / 2) - (CANONG_WIDTH / 2);
+  CANONG_Y = (axeCNGY / 2) - (CANONG_HEIGHT / 2);
+	CANOND_WIDTH = axeCNDX / 2;
+  CANOND_HEIGHT = axeCNDY / 2;
+  CANOND_X = (axeCNDX / 2) - (CANOND_WIDTH / 2);
+  CANOND_Y = (axeCNDY / 2) - (CANOND_HEIGHT / 2);
 }
 
 //un tableau qui rassemble toutes les données sur le canon
@@ -86,6 +116,7 @@ canong = {
     }else{
       canong.sprite = canonDSprite;
     }
+		canong.angle = mouseAngleA + 1.5708;
   },
 
   //fonction permettant au canon de tirer
@@ -152,6 +183,7 @@ canond = {
     }else{
       canond.sprite = canonDSprite;
     }
+		canond.angle = mouseAngleB;
   },
 
   //fonction permettant au canon de tirer
@@ -166,7 +198,7 @@ canond = {
       let mouseClickY = e.clientY;
 
       //on créer un point en fonction de ces coordonnées
-      pointDest = {x: mouseClickX, y: mouseClickY};
+      pointDest = {x: e.clientX, y: e.clientY};
 
       //on instancie une nouvelle bullet à l'aide de ce point
       bullets.push(new Bullet(pointDest));
@@ -191,6 +223,8 @@ function mainMenuUpdate(){
 //fonction qui dessine tous les objets du jeu
 function mainMenuDraw(){
 	if(renderMainMenu === true){
+		contextCanonLeft.clearRect(0, 0, canvasCanonLeft.width, canvasCanonLeft.height);
+		contextCanonRight.clearRect(0, 0, canvasCanonRight.width, canvasCanonRight.height);
 		canond.draw();
 		canong.draw();
 	}
@@ -214,6 +248,6 @@ function startButton(){
   render();
 }
 
-initCanvas();
 loadImages();
+initCanvas();
 mainMenuRender();
