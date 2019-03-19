@@ -252,7 +252,7 @@ canonLeft = {
   height: CANON_HEIGHT, // hauteur du canon
   angle: 0, //orientation du canon
   canShoot: true, //variable vérifiant si le canon est en rechargement
-  lvl: 1,
+  lvl: 1 ,
   sprite: canonASprite,
   // fonction qui dessine le canon
   draw: function(){
