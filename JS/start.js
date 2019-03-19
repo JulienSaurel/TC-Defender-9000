@@ -8,6 +8,8 @@ var contextCanonRight = canvasCanonRight.getContext("2d");
 var axeX2 = startCanvas.width;
 var axeY2 = startCanvas.height;
 
+renderMainMenu = true;
+
 //canon gauche du start
 var CANONG_WIDTH = axeX / 4; //Largeur du canon
 var CANONG_HEIGHT = axeY / 4; //Hauteur du canon
@@ -58,40 +60,40 @@ canong = {
   // fonction qui dessine le canon
   draw: function(){
     //on dessine le canon
-    contextCanon.drawImage(canon.sprite, this.x, this.y, this.width, this.height);
+    contextCanonLeft.drawImage(canong.sprite, canong.x, canong.y, canong.width, canong.height);
 
     //on réinitialiser l'orientation du canvas du canon
-    contextCanon.setTransform(1, 0, 0, 1, 0, 0);
+    contextCanonLeft.setTransform(1, 0, 0, 1, 0, 0);
 
     //on déplace le canvas aux coordonnée du centre du canon
-    contextCanon.translate((CANON_X + CANON_WIDTH / 2), (CANON_Y + CANON_HEIGHT / 2));
+    contextCanonLeft.translate((CANONG_X + CANONG_WIDTH / 2), (CANONG_Y + CANONG_HEIGHT / 2));
 
     //on effectue une rotation selon l'angle
-    contextCanon.rotate(canon.angle);
+    contextCanonLeft.rotate(canong.angle);
 
     // on effectue la translation inverse
-    contextCanon.translate(-(CANON_X + CANON_WIDTH / 2), -(CANON_Y + CANON_HEIGHT / 2));
+    contextCanonLeft.translate(-(CANONG_X + CANONG_WIDTH / 2), -(CANONG_Y + CANONG_HEIGHT / 2));
   },
 
   //fonction permettant d'actualiser les données du canon
   update: function(){
-    if(canon.lvl === 1){
-      canon.sprite = canonASprite;
+    if(canong.lvl === 1){
+      canong.sprite = canonASprite;
     }else if(canon.lvl === 2){
-      canon.sprite = canonBSprite;
+      canong.sprite = canonBSprite;
     }else if(canon.lvl === 3){
-      canon.sprite = canonCSprite;
+      canong.sprite = canonCSprite;
     }else{
-      canon.sprite = canonDSprite;
+      canong.sprite = canonDSprite;
     }
   },
 
   //fonction permettant au canon de tirer
   shoot: function(e){
     //on vérifie que le canon puisse tirer
-    if(canon.canShoot === true){
+    if(canong.canShoot === true){
       //on dit que le canon ne peut plus tirer
-      canon.canShoot = false;
+      canong.canShoot = false;
 
       //on enregistre les coordonnée du click de souris
       let mouseClickX = e.clientX - window.innerWidth * 0.125;
@@ -106,7 +108,7 @@ canong = {
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
       setTimeout(function(){
-        canon.canShoot = true;
+        canong.canShoot = true;
       }, reloadTime);
     }
   },
@@ -124,40 +126,40 @@ canond = {
   // fonction qui dessine le canon
   draw: function(){
     //on dessine le canon
-    contextCanon.drawImage(canon.sprite, this.x, this.y, this.width, this.height);
+    contextCanonRight.drawImage(canond.sprite, canond.x, canond.y, canond.width, canond.height);
 
     //on réinitialiser l'orientation du canvas du canon
-    contextCanon.setTransform(1, 0, 0, 1, 0, 0);
+    contextCanonRight.setTransform(1, 0, 0, 1, 0, 0);
 
     //on déplace le canvas aux coordonnée du centre du canon
-    contextCanon.translate((CANON_X + CANON_WIDTH / 2), (CANON_Y + CANON_HEIGHT / 2));
+    contextCanonRight.translate((CANOND_X + CANOND_WIDTH / 2), (CANOND_Y + CANOND_HEIGHT / 2));
 
     //on effectue une rotation selon l'angle
-    contextCanon.rotate(canon.angle);
+    contextCanonRight.rotate(canond.angle);
 
     // on effectue la translation inverse
-    contextCanon.translate(-(CANON_X + CANON_WIDTH / 2), -(CANON_Y + CANON_HEIGHT / 2));
+    contextCanonRight.translate(-(CANOND_X + CANOND_WIDTH / 2), -(CANOND_Y + CANOND_HEIGHT / 2));
   },
 
   //fonction permettant d'actualiser les données du canon
   update: function(){
     if(canon.lvl === 1){
-      canon.sprite = canonASprite;
+      canond.sprite = canonASprite;
     }else if(canon.lvl === 2){
-      canon.sprite = canonBSprite;
+      canond.sprite = canonBSprite;
     }else if(canon.lvl === 3){
-      canon.sprite = canonCSprite;
+      canond.sprite = canonCSprite;
     }else{
-      canon.sprite = canonDSprite;
+      canond.sprite = canonDSprite;
     }
   },
 
   //fonction permettant au canon de tirer
   shoot: function(e){
     //on vérifie que le canon puisse tirer
-    if(canon.canShoot === true){
+    if(canond.canShoot === true){
       //on dit que le canon ne peut plus tirer
-      canon.canShoot = false;
+      canond.canShoot = false;
 
       //on enregistre les coordonnée du click de souris
       let mouseClickX = e.clientX - window.innerWidth * 0.125;
@@ -172,7 +174,7 @@ canond = {
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
       setTimeout(function(){
-        canon.canShoot = true;
+        canond.canShoot = true;
       }, reloadTime);
     }
   },
@@ -180,22 +182,26 @@ canond = {
 
 //fonction qui actualise les données de tous les objets du jeu
 function mainMenuUpdate(){
-	canond.update();
-	canong.update();
+	if(renderMainMenu === true){
+		canond.update();
+		canong.update();
+	}
 }
 
 //fonction qui dessine tous les objets du jeu
 function mainMenuDraw(){
-	canond.draw();
-	canong.draw();
+	if(renderMainMenu === true){
+		canond.draw();
+		canong.draw();
+	}
 }
 
 //fonction qui effectue le rendu du jeu (update + draw)
 function mainMenuRender(){
-  interval = setInterval(function(){
-    update();
-    draw();
-  }, 10);
+	interval = setInterval(function(){
+	  mainMenuUpdate();
+	  mainMenuDraw();
+	}, 10);
 }
 // initialise();
 // render();
@@ -203,9 +209,11 @@ function mainMenuRender(){
 function startButton(){
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("game").style.display = "inline";
+	renderMainMenu = false;
   initialise();
   render();
 }
 
 initCanvas();
+loadImages();
 mainMenuRender();
