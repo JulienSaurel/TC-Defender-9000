@@ -7,7 +7,6 @@ html, body {
   overflow: hidden; /*  Disable scrollbars */
   display: block;  /* No floating content on sides */
   font-family: "Impact";
-  font-size: 95%;
 }
 
 #startCanvas {
@@ -15,29 +14,30 @@ html, body {
   display: block;
   margin: auto;
   z-index: 1;
-  left: 75px;
+}
+#canonLeft {
+  position:absolute;
+  display: block;
+  margin: auto;
+  z-index: 1;
 }
 
-#canonLeft {
-    position:absolute;
-    display: block;
-    margin: auto;
-    z-index: 1;
-    left: 75px;
+#canonRight {
+  position:absolute;
+  display: block;
+  margin: auto;
+  z-index: 1;
 }
- #canonRight {
-    position:absolute;
-    display: block;
-    margin: auto;
-    z-index: 1;
-    left: 675px;
+
+#startButtonDiv {
+  text-align: center;
+  flex-direction: column;
+  display: flex;
 }
+
 #startButton {
-    position: absolute;
-  margin-top: 25px;
   width:100px;
   z-index: 10;
-  left: 512.25px;
 }
 
 #gameScreen {
@@ -52,6 +52,10 @@ html, body {
   position: absolute;
   display: block;
   margin: auto;
+}
+
+#game {
+  display: none;
 }
 
 #gameInfos {
@@ -71,6 +75,16 @@ html, body {
   height: 70%;
 }
 
+#hpwn {
+  display: flex;
+}
+
+#hp, #wn {
+  width:50%;
+}
+
+
+
 hr {
   width: 100%;
   border: 2px solid green;
@@ -78,10 +92,12 @@ hr {
 }
 
 .left {
+  height: 100%;
   width: 70%;
 }
 
 .right {
+  height: 100%;
   display: flex;
   width: 30%;
 }

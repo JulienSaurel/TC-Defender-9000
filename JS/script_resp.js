@@ -10,7 +10,6 @@ var axeY = canvas.height;
 //infoDivVar
 var infoDiv = document.getElementById("gameInfos");
 var paraSp = document.getElementById("statusPoints");
-
 //chemin et points
 var chemin = Array(); //array de points
 
@@ -27,11 +26,6 @@ var BULLET_SPEED = 5; //vitesse d'une bullet
 var reloadTime = 500; //temps de rechargement (en ms) du tir
 var bullet_damages = 1;
 var bullets = Array(); //tableau contenant toutes les bullet tirées
-
-//explosions
-var explosionWidth = 100;
-var explosionHeight = 100;
-var explosions = Array();
 
 //ennemies
 var ENNEMY_WIDTH = (1 / 12) * 0.5 * axeX; //largeur d'un ennemi
@@ -58,7 +52,6 @@ var tcTwoBSprite = new Image(); //sprite du TC lvl 2 tourné dans l'autre sens
 var tcThreeASprite = new Image(); //sprite du TC lvl 3 tourné dans un sens
 var tcThreeBSprite = new Image(); //sprite du TC lvl 3 tourné dans l'autre sens
 var microWaveSprite = new Image();
-var explosionSprite = new Image();
 
 //position de la souris
 var angle; //angle (en rad) entre le centre du canon et la position de la souris (recalculé en permanence)
@@ -66,9 +59,7 @@ var mouseX; //position X de la souris
 var mouseY; //position Y de la souris
 
 //partie en général
-var paused = false;
-var maxPlayerHP = 20
-var playerHP = maxPlayerHP; //points de vies du joueur
+var playerHP = 5; //points de vies du joueur
 var statusPoints = 0;
 var score = 0;
 var totalTime = 0;
@@ -83,11 +74,10 @@ var BULLET_SPEED_MAX = 5;
 //waves
 var infiniteWaveTimer = 5000;
 var spawnables = Array();
-var wn = 1;
 
 //permet de charger les images en leur attribuant une source
 function loadImages(){
-  bulletSprite.src = "../img/belette.png";
+  bulletSprite.src = "../img/vaisseau.jpg";
   canonASprite.src = "../img/canon_1.png";
   canonBSprite.src = "../img/canon_2.png";
   canonCSprite.src = "../img/canon_3.png";
@@ -99,17 +89,19 @@ function loadImages(){
   tcThreeASprite.src = "../img/TC3_A.png";
   tcThreeBSprite.src = "../img/TC3_B.png";
   microWaveSprite.src = "../img/micro_onde.png";
-  explosionSprite.src = "../img/explosion.png";
 }
 
 //fonction appelée au lancement
 function initialise(){
   setCosts();
-  actualiseHP();
   actualiseASDiv();
   actualiseSSDiv();
   actualiseSTRDiv();
   loadImages(); // charge les images
+  window.addEventListener('resize', function(){
+    resizeCanvas();
+    resizeDiv();
+  }, false); //ce listener permet lancer une fonction pour rendre le jeu responsive
   document.addEventListener("mousemove", mouseMoveHandler, false); //listener pour le mouvement de la souris
   document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
   resizeCanvas(); //adapte la taille du jeu à l'ecran
@@ -253,7 +245,7 @@ canonLeft = {
   height: CANON_HEIGHT, // hauteur du canon
   angle: 0, //orientation du canon
   canShoot: true, //variable vérifiant si le canon est en rechargement
-  lvl: 1 ,
+  lvl: 1,
   sprite: canonASprite,
   // fonction qui dessine le canon
   draw: function(){
@@ -464,25 +456,6 @@ function Bullet(pointDest){
   }
 }
 
-function Explode(point, width, height){
-  this.x = point.x + width / 2;
-  this.y = point.y + height / 2;
-  this.with = explosionWidth;
-  this.height = explosionHeight;
-  this.sprite = explosionSprite;
-  this.active = true;
-
-  this.draw = function(){
-    if(this.active === true){
-      context.drawImage(this.sprite, this.x, this.y, this.width, this.height);
-    }
-  };
-
-  this.update = function(){
-
-  };
-}
-
 //constructeur d'un ennemi
 function Ennemy(lvl){
   this.lvl = lvl;
@@ -550,7 +523,7 @@ function Ennemy(lvl){
     }
     if(this.hp <= 0){
       if(this.active === true){
-        score += this.lvl;
+
         statusPoints += this.lvl;
       }
       this.active = false;
@@ -593,9 +566,6 @@ function bulletCollider(){
               && ennemy.x + ennemy.width > bullet.x
               && ennemy.y < bullet.y - bullet.height
               && ennemy.y + ennemy.height > bullet.y){
-
-              //explosions
-              explosions.push(new Explode({x: bullet.x, y: bullet.y,}, bullet.width, bullet.height));
 
               //la bullet se désactive
               bullet.active = false;
@@ -690,53 +660,26 @@ function playWaveNumber(wn){
 }
 
 function playGame(){
+  let wn = 1;
   playWaveNumber(wn);
   let newInterval = setInterval(function(){
     if(spawnables.length === 0){
+      wn += 1;
       let nextWave = true;
       for (var i = 0; i < ennemies.length; i++) {
-        if(ennemies[i] != undefined && ennemies[i].active === true){
+        if(ennemies[i] != undefined && [i].active === true){
           nextWave = false;
         }
       }
       if(nextWave === true){
-        wn += 1;
-
-        if(wn === 2){
-          score += 10;
-        }else if(wn === 3){
-          score += 100;
-        }else if(wn === 4){
-          score += 200;
-        }else{
-          score += 400;
-        }
         playWaveNumber(wn);
-        nextWave = false;
       }
     }
   }, 10);
 }
 
-function actualiseHP(){
-  document.getElementById("hp").innerHTML = "HP : " + playerHP + " / " + maxPlayerHP;
-}
-
-function actualiseScore(){
-  document.getElementById("scorePoints").innerHTML = "Score : " + score;
-}
-
 function actualiseStatusPoints(){
   document.getElementById("statusPoints").innerHTML = "Points disponibles : " + statusPoints + " SP";
-}
-
-function actualiseWaveNumber(){
-  let waneNum = document.getElementById("wn");
-  if(wn !== 5){
-      waneNum.innerHTML = "Wave :" + wn;
-  }else{
-      waneNum.innerHTML = "Wave : ∞";
-  }
 }
 
 //diminue le temps de rechargement du tir
@@ -749,7 +692,7 @@ function actualiseASDiv(){
 }
 
 function buttonAS(){
-  if(statusPoints >= RELOAD_TIME_COST && reloadTime - RELOAD_TIME_MAX > 200){
+  if(statusPoints >= RELOAD_TIME_COST && reloadTime - RELOAD_TIME_MAX > 0){
     statusPoints -= RELOAD_TIME_COST;
     increaseAttackSpeed(100);
     actualiseASDiv();
@@ -788,12 +731,6 @@ function garbageCollector(){
 
   bullets = bullets.filter(bullet => bullet != undefined);
 
-  for (var i = 0; i < explosions.length; i++) {
-    if(explosions[i] != undefined && explosions[i].active === false)
-    delete explosions[i];
-  }
-
-  explosions = explosions.filter(explosion => explosion != undefined);
 }
 
 //augmente les dégats des bullets
@@ -833,86 +770,61 @@ function afficherStatusPoints(){
   paraSp.innerHTML = "Points disponibles : " + statusPoints;
 }
 
-//pause le jeu
-function pause(){
-  paused = true;
-}
-
-//désactive la pause
-function resume(){
-  paused = false;
-}
-
 //fonction qui actualise les données de tous les objets du jeu
 function update(){
-  if(paused === false){
-    garbageCollector();
-    actualiseHP();
-    actualiseStatusPoints();
-    actualiseScore();
-    actualiseWaveNumber();
-    microWave.update();
-    if(winDetector() === true){
-      alert("ok");
-      clearInterval(interval);
-    }
-    replaceEnnemies();
-    replaceCanon();
-    replaceBullets();
-    canon.update();
-    bullets.forEach(function(bullet){
-      if(bullet != undefined){
-        bulletCollider();
-        bullet.update();
-      }
-    });
-
-    ennemies.forEach(function(ennemy){
-      if(ennemy != undefined){
-        ennemy.update();
-      }
-    });
-
-    explosions.forEach(function(explosion){
-      explosion.update();
-    });
+  garbageCollector();
+  actualiseStatusPoints();
+  microWave.update();
+  if(winDetector() === true){
+    alert("ok");
+    clearInterval(interval);
   }
+  replaceEnnemies();
+  replaceCanon();
+  replaceBullets();
+  canon.update();
+  bullets.forEach(function(bullet){
+    if(bullet != undefined){
+      bulletCollider();
+      bullet.update();
+    }
+  });
+
+  ennemies.forEach(function(ennemy){
+    if(ennemy != undefined){
+      ennemy.update();
+    }
+  });
 }
 
 //fonction qui dessine tous les objets du jeu
 function draw(){
-  if(paused === false){
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    contextCanon.clearRect(0, 0, canvas.width, canvas.height);
-    microWave.draw();
-    bullets.forEach(function(bullet){
-      if(bullet != undefined){
-        if(!bullet.launched){
-          objectToDirection(bullet, bullet.pointDest);
-          bullet.launched = true;
-        }
-        bullet.draw();
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  contextCanon.clearRect(0, 0, canvas.width, canvas.height);
+  microWave.draw();
+  bullets.forEach(function(bullet){
+    if(bullet != undefined){
+      if(!bullet.launched){
+        objectToDirection(bullet, bullet.pointDest);
+        bullet.launched = true;
       }
-    });
+      bullet.draw();
+    }
+  });
 
-    ennemies.forEach(function(ennemy){
-      if(ennemy != undefined){
-        if(ennemy.totalMove === 0){
-          if(ennemy.actualPoint < chemin.length - 1){
-            objectToPoint(ennemy, chemin[ennemy.actualPoint + 1]);
-            ennemy.actualPoint ++;
-          }
+  ennemies.forEach(function(ennemy){
+    if(ennemy != undefined){
+      if(ennemy.totalMove === 0){
+        if(ennemy.actualPoint < chemin.length - 1){
+          objectToPoint(ennemy, chemin[ennemy.actualPoint + 1]);
+          ennemy.actualPoint ++;
         }
-        ennemy.draw();
       }
-    });
+      ennemy.draw();
+    }
+  });
 
-    explosions.forEach(function(explosion){
-      explosion.draw();
-    });
-
-    canon.draw();
-  }
+  canon.draw();
 }
 
 //fonction qui effectue le rendu du jeu (update + draw)
@@ -930,10 +842,3 @@ function render(){
 }
 // initialise();
 // render();
-
-function startButton(){
-  document.getElementById("startScreen").style.display = "none";
-  document.getElementById("game").style.display = "inline";
-  initialise();
-  render();
-}
