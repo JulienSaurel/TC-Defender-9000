@@ -7,7 +7,6 @@ html, body {
   overflow: hidden; /*  Disable scrollbars */
   display: block;  /* No floating content on sides */
   font-family: "Impact";
-  font-size: 95%;
 }
 
 #startCanvas {
@@ -66,10 +65,12 @@ hr {
 }
 
 .left {
+  height: 100%;
   width: 70%;
 }
 
 .right {
+  height: 100%;
   display: flex;
   width: 30%;
 }
