@@ -72,6 +72,7 @@ ennemi = {
   update: function(){
     if(ennemi.hp <= 0){
       ennemi.active = false;
+      startButton();
     }
   },
 
@@ -172,9 +173,10 @@ canong = {
 
       //on créer un point en fonction de ces coordonnées
       pointDest = {x: mouseClickX, y: mouseClickY};
+      pointStart = {x: canong.x, y: conong.y};
 
       //on instancie une nouvelle bullet à l'aide de ce point
-      bullets.push(new Bullet(pointDest));
+      bullets.push(new startBullet(pointStart, pointDest));
 
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
@@ -234,14 +236,15 @@ canond = {
       canond.canShoot = false;
 
       //on enregistre les coordonnée du click de souris
-      let mouseClickX = e.clientX - window.innerWidth * 0.125;
-      let mouseClickY = e.clientY;
+      let mouseClickX = ev.clientX;
+      let mouseClickY = ev.clientY;
 
       //on créer un point en fonction de ces coordonnées
-      pointDest = {x: e.clientX, y: e.clientY};
+      pointDest = {x: ev.clientX, y: ev.clientY};
+      pointStart = {x: canong.x, y: conong.y};
 
       //on instancie une nouvelle bullet à l'aide de ce point
-      bullets.push(new Bullet(pointDest));
+      bullets.push(new startBullet(pointStart, pointDest));
 
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
@@ -252,9 +255,9 @@ canond = {
   },
 }
 
-function startBullet(pointDest){
-  this.x = canonPoint().x; // coordonnée X d'une bullet (initialisée aux coordonnées du bout du canon)
-  this.y = canonPoint().y; // coordonnée Y d'une bullet (initialisée aux coordonnées du bout du canon)
+function startBullet(startPoint, pointDest){
+  this.x = startPoint.x; // coordonnée X d'une bullet (initialisée aux coordonnées du bout du canon)
+  this.y = startPoint.y; // coordonnée Y d'une bullet (initialisée aux coordonnées du bout du canon)
   this.height = BULLET_HEIGHT; // hauteur d'une bullet
   this.width = BULLET_WIDTH; // largeur d'une bullet
   this.sprite = bulletSprite; // sprite d'une bullet
@@ -269,14 +272,14 @@ function startBullet(pointDest){
   //fonction qui dessine la bullet si elle est active
   this.draw = function(){
     if(this.active === true){
-      context.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+      startContext.drawImage(this.sprite, this.x, this.y, this.width, this.height);
     }
   }
 
   //fonction qui actualise l'état d'une bullet
   this.update = function(){
     //si la bullet est en dehors de l'écran on la désactive
-    if(this.x > axeX || this.x + this.width < 0 || this.y > axeY || this.y + this.height < 0 || !this.active){
+    if(this.x > axeX2 || this.x + this.width < 0 || this.y > axeY2 || this.y + this.height < 0 || !this.active){
       this.active = false;
     }else{
       //sinon on la fait avancer
