@@ -11,6 +11,9 @@ var axeY = canvas.height;
 var infoDiv = document.getElementById("gameInfos");
 var paraSp = document.getElementById("statusPoints");
 
+//pause div
+var pauseMenu = document.getElementById("pause");
+
 //chemin et points
 var chemin = Array(); //array de points
 
@@ -164,6 +167,10 @@ function resizeDiv(){
   infoDiv.style.left = window.innerWidth * 0.5 + window.innerWidth * 0.125 + "px";
   infoDiv.style.width = window.innerWidth * 0.25 + "px";
   infoDiv.style.height = window.innerWidth * 0.5 + "px";
+}
+
+function resizePauseMenu(){
+  pauseMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
 //fonction qui enregistre la position de la souris
@@ -835,6 +842,8 @@ function afficherStatusPoints(){
 
 //pause le jeu
 function pause(){
+  resizePauseMenu();
+  pauseMenu.style.display = "inline";
   paused = true;
 }
 

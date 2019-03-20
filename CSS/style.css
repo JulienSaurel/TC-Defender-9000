@@ -83,7 +83,18 @@ html, body {
   width:50%;
 }
 
+#pause{
+  width:45%;
+  margin: auto;
+  background-color: grey;
+  display: none;
+  position: absolute;
+  z-index: 15;
+}
 
+#pause img {
+  width: inherit;
+}
 
 hr {
   width: 100%;
