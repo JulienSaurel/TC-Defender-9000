@@ -32,10 +32,51 @@ var CANOND_X = (axeCNDX / 2) - (CANOND_WIDTH / 2); //coordonnée X du canon
 var CANOND_Y = (axeCNDY / 2) - (CANOND_HEIGHT / 2); //coordonnée Y du canon
 
 //ennemi du start screen
-var SENNEMY_WIDTH = (1 / 12) * 0.5 * axeX2; //largeur
-var SENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY2; //hauteur
+var SENNEMY_WIDTH = (1 / 12) * 0.8 * axeX2; //largeur
+var SENNEMY_HEIGHT = (1 / 8) * axeY2; //hauteur
 var SENNEMY_SPEED = 0; //vitesse
-var ennemies = Array(); //tableau contenant tous les ennemis
+
+function initEnemy(){
+    ennemi.width = 150;
+    ennemi.x = axeX2 / 2;
+    ennemy.y = (axeY2 / 4)*3;
+
+}
+
+ennemi = {
+  x: (axeX2 / 2) - SENNEMY_WIDTH/2, // coordonnée X du canon
+  y: (axeY2 / 4) * 2.5, // coordonnée Y du canon
+  width: SENNEMY_WIDTH, // largeur du canon
+  height: SENNEMY_HEIGHT, // hauteur du canon
+  lvl: 2,
+  sprite: tcTwoASprite,
+  active: true,
+  //hp: ennemi.lvl,
+  // fonction qui dessine le canon
+  draw: function(){
+    //on dessine le canon
+    startContext.drawImage(ennemi.sprite, ennemi.x, ennemi.y, ennemi.width, ennemi.height);
+
+  },
+
+  changeSprite: function(){
+    if(ennemi.sprite === tcTwoASprite){
+        ennemi.sprite = tcTwoBSprite;
+      }else{
+      ennemi.sprite = tcTwoASprite;
+    }
+  },
+
+  
+
+  update: function(){
+    if(ennemi.hp <= 0){
+      ennemi.active = false;
+      startButton();
+    }
+  },
+
+}
 
 function angleCalculator(ev){
 	let mX = axeX2 / 2;
@@ -127,14 +168,15 @@ canong = {
       canong.canShoot = false;
 
       //on enregistre les coordonnée du click de souris
-      let mouseClickX = e.clientX - window.innerWidth * 0.125;
-      let mouseClickY = e.clientY;
+      let mouseClickX = ev.clientX;
+      let mouseClickY = ev.clientY;
 
       //on créer un point en fonction de ces coordonnées
       pointDest = {x: mouseClickX, y: mouseClickY};
+      pointStart = {x: canong.x, y: conong.y};
 
       //on instancie une nouvelle bullet à l'aide de ce point
-      bullets.push(new Bullet(pointDest));
+      bullets.push(new startBullet(pointStart, pointDest));
 
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
@@ -194,14 +236,15 @@ canond = {
       canond.canShoot = false;
 
       //on enregistre les coordonnée du click de souris
-      let mouseClickX = e.clientX - window.innerWidth * 0.125;
-      let mouseClickY = e.clientY;
+      let mouseClickX = ev.clientX;
+      let mouseClickY = ev.clientY;
 
       //on créer un point en fonction de ces coordonnées
-      pointDest = {x: e.clientX, y: e.clientY};
+      pointDest = {x: ev.clientX, y: ev.clientY};
+      pointStart = {x: canong.x, y: conong.y};
 
       //on instancie une nouvelle bullet à l'aide de ce point
-      bullets.push(new Bullet(pointDest));
+      bullets.push(new startBullet(pointStart, pointDest));
 
 
       //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
@@ -212,11 +255,46 @@ canond = {
   },
 }
 
+function startBullet(startPoint, pointDest){
+  this.x = startPoint.x; // coordonnée X d'une bullet (initialisée aux coordonnées du bout du canon)
+  this.y = startPoint.y; // coordonnée Y d'une bullet (initialisée aux coordonnées du bout du canon)
+  this.height = BULLET_HEIGHT; // hauteur d'une bullet
+  this.width = BULLET_WIDTH; // largeur d'une bullet
+  this.sprite = bulletSprite; // sprite d'une bullet
+  this.speed = BULLET_SPEED; //vitesse d'une bullet
+  this.active = true; //boolean qui dit si la bullet doit être dessinée ou non
+  this.speedX = 0; //vitesse X
+  this.speedY = 0; // vitesse Y
+  this.launched = false; //la bullet a été lancée ou non
+  this.pointDest = pointDest; // destination de la bullet
+  this.damages = bullet_damages; // dégats de la bullet
+
+  //fonction qui dessine la bullet si elle est active
+  this.draw = function(){
+    if(this.active === true){
+      startContext.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+    }
+  }
+
+  //fonction qui actualise l'état d'une bullet
+  this.update = function(){
+    //si la bullet est en dehors de l'écran on la désactive
+    if(this.x > axeX2 || this.x + this.width < 0 || this.y > axeY2 || this.y + this.height < 0 || !this.active){
+      this.active = false;
+    }else{
+      //sinon on la fait avancer
+        this.x += this.speedX;
+        this.y += this.speedY;
+    }
+  }
+}
+ 
 //fonction qui actualise les données de tous les objets du jeu
 function mainMenuUpdate(){
 	if(renderMainMenu === true){
 		canond.update();
 		canong.update();
+    ennemi.update();
 	}
 }
 
@@ -227,6 +305,7 @@ function mainMenuDraw(){
 		contextCanonRight.clearRect(0, 0, canvasCanonRight.width, canvasCanonRight.height);
 		canond.draw();
 		canong.draw();
+    ennemi.draw();
 	}
 }
 
@@ -242,6 +321,7 @@ function mainMenuRender(){
 
 function startButton(){
   document.getElementById("startScreen").style.display = "none";
+  document.getElementById("startButtonDiv").style.display = "none";
   document.getElementById("game").style.display = "inline";
 	renderMainMenu = false;
   initialise();
