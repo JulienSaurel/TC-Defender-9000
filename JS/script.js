@@ -115,10 +115,12 @@ function initialise(){
   actualiseSSDiv();
   actualiseSTRDiv();
   loadImages(); // charge les images
+  document.addEventListener("keydown", shortCuts, false);
   document.addEventListener("mousemove", mouseMoveHandler, false); //listener pour le mouvement de la souris
   document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
   resizeCanvas(); //adapte la taille du jeu à l'ecran
   resizeDiv(); // adapate la taille de la div d'infos
+  resizePauseMenu();
 }
 
 //function qui rend le jeu responsive
@@ -172,6 +174,8 @@ function resizeDiv(){
 }
 
 function resizePauseMenu(){
+  pauseMenu.style.top = canvas.height * 0.25 + "px";
+  pauseMenu.style.height = canvas.height / 2 + "px";
   pauseMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
@@ -663,20 +667,24 @@ function waveFour(waveLength){
 }
 
 function playUnlimitedWave(){
-  let rdm = Math.floor(Math.random() * 3) + 1;
-  ennemies.push(new Ennemy(rdm));
-  if(infiniteWaveTimer > 100){
-    infiniteWaveTimer -= 100;
+  if(paused === false){
+    let rdm = Math.floor(Math.random() * 3) + 1;
+    ennemies.push(new Ennemy(rdm));
+    if(infiniteWaveTimer > 100){
+      infiniteWaveTimer -= 100;
+    }
   }
   setTimeout(playUnlimitedWave, infiniteWaveTimer);
 }
 
 function playWave(wn, timeInterval){
   let newInterval = setInterval(function(){
-    ennemies.push(spawnables[0]);
-    spawnables.shift();
-    if(spawnables.length === 0){
-      spawnables = Array();
+    if(paused === false){
+      ennemies.push(spawnables[0]);
+      spawnables.shift();
+      if(spawnables.length === 0){
+        spawnables = Array();
+      }
     }
   }, timeInterval);
 }
@@ -842,16 +850,25 @@ function afficherStatusPoints(){
   paraSp.innerHTML = "Points disponibles : " + statusPoints;
 }
 
+function shortCuts(e){
+  if(e.code === "Space"){
+    if(paused === true){
+      resume();
+    }else{
+      pause();
+    }
+  }
+}
+
 //pause le jeu
 function pause(){
-  resizePauseMenu();
-  pauseMenu.style.display = "inline";
   paused = true;
+  pauseMenu.classList.add("isActive");
 }
 
 //désactive la pause
 function resume(){
-  pauseMenu.style.display = "none";
+  pauseMenu.classList.remove("isActive");
   paused = false;
 }
 
@@ -943,4 +960,3 @@ function render(){
 }
 // initialise();
 // render();
-
