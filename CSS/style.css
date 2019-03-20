@@ -30,6 +30,7 @@ html, body {
 }
 
 #startButtonDiv {
+  margin-top: 500px;
   text-align: center;
   flex-direction: column;
   display: flex;

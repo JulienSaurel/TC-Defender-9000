@@ -318,6 +318,7 @@ function mainMenuRender(){
 
 function startButton(){
   document.getElementById("startScreen").style.display = "none";
+  document.getElementById("startButtonDiv").style.display = "none";
   document.getElementById("game").style.display = "inline";
 	renderMainMenu = false;
   initialise();
