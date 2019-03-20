@@ -941,9 +941,4 @@ function render(){
 // initialise();
 // render();
 
-function startButton(){
-  document.getElementById("startScreen").style.display = "none";
-  document.getElementById("game").style.display = "inline";
-  initialise();
-  render();
-}
+
