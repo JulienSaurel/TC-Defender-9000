@@ -84,20 +84,45 @@ html, body {
 }
 
 #pause{
-  opacity: 1;
-  width:45%;
+
+  transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  opacity: 0;
+  text-align: center;
+  border: 5px solid green;
+  width:42.5%;
+  height:50%;
   margin: auto;
-  background-color: grey;
-  display: none;
+  background-color: white;
   position: absolute;
   z-index: 15;
-  transition: opacity 1s linear;
-  -moz-transition: opacity 1s linear;
-  -webkit-transition: opacity 1s linear;
 }
 
 #pause img {
-  width: inherit;
+  margin-top:5%;
+  width: 90%;
+  height: auto;
+}
+
+#pause.isActive {
+  transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  opacity: 0.8;
+}
+
+.button {
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 hr {
