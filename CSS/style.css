@@ -84,12 +84,16 @@ html, body {
 }
 
 #pause{
+  opacity: 1;
   width:45%;
   margin: auto;
   background-color: grey;
   display: none;
   position: absolute;
   z-index: 15;
+  transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+  -webkit-transition: opacity 1s linear;
 }
 
 #pause img {

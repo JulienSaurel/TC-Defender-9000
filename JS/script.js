@@ -849,6 +849,7 @@ function pause(){
 
 //désactive la pause
 function resume(){
+  pauseMenu.style.display = "none";
   paused = false;
 }
 
