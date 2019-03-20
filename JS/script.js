@@ -69,6 +69,8 @@ var mouseX; //position X de la souris
 var mouseY; //position Y de la souris
 
 //partie en général
+
+var wn = 1;
 var paused = false;
 var maxPlayerHP = 20
 var playerHP = maxPlayerHP; //points de vies du joueur
@@ -917,6 +919,7 @@ function draw(){
       }
     });
 
+
     explosions.forEach(function(explosion){
       explosion.draw();
     });
@@ -940,5 +943,4 @@ function render(){
 }
 // initialise();
 // render();
-
 
