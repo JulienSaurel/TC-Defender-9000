@@ -331,4 +331,3 @@ function startButton(){
 loadImages();
 initCanvas();
 mainMenuRender();
-generateBackSound();
