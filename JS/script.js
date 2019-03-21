@@ -117,10 +117,12 @@ function initialise(){
   loadImages(); // charge les images
   document.addEventListener("keydown", shortCuts, false);
   document.addEventListener("mousemove", mouseMoveHandler, false); //listener pour le mouvement de la souris
-  document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
   resizeCanvas(); //adapte la taille du jeu à l'ecran
   resizeDiv(); // adapate la taille de la div d'infos
   resizePauseMenu();
+  setTimeout(function(){
+    document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
+  }, 100);
 }
 
 //function qui rend le jeu responsive
@@ -237,6 +239,7 @@ canon = {
   shoot: function(e){
     //on vérifie que le canon puisse tirer
     if(canon.canShoot === true){
+      playShootSound();
       //on dit que le canon ne peut plus tirer
       canon.canShoot = false;
 
@@ -557,6 +560,7 @@ function Ennemy(lvl){
   this.update = function(){
     if(this.actualPoint === (chemin.length - 1) && this.x === chemin[chemin.length - 1].x && this.y === chemin[chemin.length - 1].y){
       if(this.active === true){
+        playLostHPSound();
         playerHP -= this.lvl;
       }
       this.active = false;
@@ -566,6 +570,7 @@ function Ennemy(lvl){
         score += this.lvl;
         statusPoints += this.lvl;
       }
+      playEnnemyDyingSound();
       this.active = false;
     }
     if(this.totalMove > 0){
@@ -606,6 +611,11 @@ function bulletCollider(){
               && ennemy.x + ennemy.width > bullet.x
               && ennemy.y < bullet.y - bullet.height
               && ennemy.y + ennemy.height > bullet.y){
+
+
+              if(ennemy.hp > bullet.damages){
+                playHitSound();
+              }
 
               //explosions
               explosions.push(new Explode({x: bullet.x, y: bullet.y,}, bullet.width, bullet.height));
@@ -735,6 +745,29 @@ function playGame(){
   }, 10);
 }
 
+function garbageCollector(){
+  for (var i = 0; i < ennemies.length; i++) {
+    if(ennemies[i] != undefined && ennemies[i].active === false)
+    delete ennemies[i];
+  }
+
+  ennemies = ennemies.filter(ennemy => ennemy != undefined);
+
+  for (var i = 0; i < ennemies.length; i++) {
+    if(bullets[i] != undefined && bullets[i].active === false)
+    delete bullets[i];
+  }
+
+  bullets = bullets.filter(bullet => bullet != undefined);
+
+  for (var i = 0; i < explosions.length; i++) {
+    if(explosions[i] != undefined && explosions[i].active === false)
+    delete explosions[i];
+  }
+
+  explosions = explosions.filter(explosion => explosion != undefined);
+}
+
 function actualiseHP(){
   document.getElementById("hp").innerHTML = "HP : " + playerHP + " / " + maxPlayerHP;
 }
@@ -767,9 +800,12 @@ function actualiseASDiv(){
 
 function buttonAS(){
   if(statusPoints >= RELOAD_TIME_COST && reloadTime - RELOAD_TIME_MAX > 200){
+    playUpgradeSound();
     statusPoints -= RELOAD_TIME_COST;
     increaseAttackSpeed(100);
     actualiseASDiv();
+  }else{
+    playNotUpgradableSound();
   }
 }
 
@@ -784,33 +820,13 @@ function actualiseSSDiv(){
 
 function buttonSS(){
   if(statusPoints >= BULLET_SPEED_COST && BULLET_SPEED - BULLET_SPEED_MAX < BULLET_SPEED_MAX){
+    playUpgradeSound();
     statusPoints -= BULLET_SPEED_COST;
     increaseShootingSpeed(1);
     actualiseSSDiv();
+  }else{
+    playNotUpgradableSound();
   }
-}
-
-function garbageCollector(){
-  for (var i = 0; i < ennemies.length; i++) {
-    if(ennemies[i] != undefined && ennemies[i].active === false)
-    delete ennemies[i];
-  }
-
-  ennemies = ennemies.filter(ennemy => ennemy != undefined);
-
-  for (var i = 0; i < ennemies.length; i++) {
-    if(bullets[i] != undefined && bullets[i].active === false)
-    delete bullets[i];
-  }
-
-  bullets = bullets.filter(bullet => bullet != undefined);
-
-  for (var i = 0; i < explosions.length; i++) {
-    if(explosions[i] != undefined && explosions[i].active === false)
-    delete explosions[i];
-  }
-
-  explosions = explosions.filter(explosion => explosion != undefined);
 }
 
 //augmente les dégats des bullets
@@ -824,9 +840,12 @@ function actualiseSTRDiv(){
 
 function buttonSTR(){
   if(statusPoints >= STRENGTH_COST && bullet_damages < STRENGTH_MAX){
+    playUpgradeSound();
     statusPoints -= STRENGTH_COST;
     increasestrengh(1);
     actualiseSTRDiv();
+  }else{
+    playNotUpgradableSound();
   }
 }
 
@@ -863,6 +882,7 @@ function shortCuts(e){
 //pause le jeu
 function pause(){
   if(paused === false){
+    playPausingSound();
     paused = true;
     pauseMenu.style.display = "inline";
     setTimeout(function(){
@@ -874,6 +894,7 @@ function pause(){
 //désactive la pause
 function resume(){
   if(paused === true){
+    playResumeSound();
     pauseMenu.classList.remove("isActive");
     setTimeout(function(){
       pauseMenu.style.display = "none";
@@ -892,7 +913,7 @@ function update(){
     actualiseWaveNumber();
     microWave.update();
     if(winDetector() === true){
-      alert("ok");
+      playGameOverSound();
       clearInterval(interval);
     }
     replaceEnnemies();
