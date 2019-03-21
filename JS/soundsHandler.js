@@ -11,6 +11,7 @@ var upGradeSound;
 var notUpgradableSound;
 
 var isFirstOpen = true;
+var mute = false;
 
 function initSounds(){
   backGroundAudio = document.getElementById("playAudio");
@@ -67,53 +68,99 @@ function playAmbianceSound(){
 }
 
 function playHitSound(){
-  hitSound.currentTime = 0;
-  hitSound.play();
+  if(mute === false){
+    hitSound.currentTime = 0;
+    hitSound.play();
+  }
 }
 
 function playLostHPSound(){
-  lostHPSound.currentTime = 0;
-  lostHPSound.play();
+  if(mute === false){
+    lostHPSound.currentTime = 0;
+    lostHPSound.play();
+  }
 }
 
 function playShootSound(){
-  shootSound.currentTime = 0;
-  shootSound.play();
+  if(mute === false){
+    shootSound.currentTime = 0;
+    shootSound.play();
+  }
 }
 
 function playHoverButtonSound(){
-  hoverButtonSound.currentTime = 0;
-  hoverButtonSound.play();
+  if(mute === false){
+    hoverButtonSound.currentTime = 0;
+    hoverButtonSound.play();
+  }
 }
 
 function playPausingSound(){
-  pausingSound.currentTime = 0;
-  pausingSound.play();
+  if(mute === false){
+    pausingSound.currentTime = 0;
+    pausingSound.play();
+  }
 }
 
 function playGameOverSound(){
-  gameOverSound.currentTime = 0;
-  gameOverSound.play();
+  if(mute === false){
+    gameOverSound.currentTime = 0;
+    gameOverSound.play();
+  }
 }
 
 function playUpgradeSound() {
-  upGradeSound.currentTime = 0;
-  upGradeSound.play();
+  if(mute === false){
+    upGradeSound.currentTime = 0;
+    upGradeSound.play();
+  }
 }
 
 function playResumeSound() {
-  resumeSound.currentTime = 0;
-  resumeSound.play();
+  if(mute === false){
+    resumeSound.currentTime = 0;
+    resumeSound.play();
+  }
 }
 
 function playEnnemyDyingSound(){
-  ennemiDyingSound.currentTime = 0;
-  ennemiDyingSound.play();
+  if(mute === false){
+    ennemiDyingSound.currentTime = 0;
+    ennemiDyingSound.play();
+  }
 }
 
 function playNotUpgradableSound(){
-  notUpgradableSound.currentTime = 0;
-  notUpgradableSound.play();
+  if(mute === false){
+    notUpgradableSound.currentTime = 0;
+    notUpgradableSound.play();
+  }
+}
+
+function muteInterface(){
+  mute = true;
+}
+
+function unmuteInterface(){
+  mute = false;
+}
+
+function muteBackground(){
+  backGroundAudio.pause();
+}
+
+function unmuteBackground(){
+  backGroundAudio.play();
+}
+
+function muteSound(){
+  muteInterface();
+  muteBackground();
+}
+
+function unmuteSound(){
+  unmuteInterface();
+  unmuteBackground();
 }
 
 initSounds();
