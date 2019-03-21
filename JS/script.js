@@ -804,6 +804,7 @@ function buttonAS(){
     statusPoints -= RELOAD_TIME_COST;
     increaseAttackSpeed(100);
     actualiseASDiv();
+    actualiseStatusPoints();
   }else{
     playNotUpgradableSound();
   }
@@ -824,6 +825,7 @@ function buttonSS(){
     statusPoints -= BULLET_SPEED_COST;
     increaseShootingSpeed(1);
     actualiseSSDiv();
+    actualiseStatusPoints();
   }else{
     playNotUpgradableSound();
   }
@@ -844,6 +846,7 @@ function buttonSTR(){
     statusPoints -= STRENGTH_COST;
     increasestrengh(1);
     actualiseSTRDiv();
+    actualiseStatusPoints();
   }else{
     playNotUpgradableSound();
   }
