@@ -6,8 +6,8 @@ var hoverButtonSound; //son joué lorsque la souris d'un joueur survole un butto
 var pausingSound; //son joué au début d'une pause
 
 function initSounds(){
-  ambianceSound = new Audio("../sounds/back_sound.mp3");
-  ambianceSound.volume = 0.05;
+  ambianceSound = new Audio("../sounds/ambiance_sound.mp3");
+  ambianceSound.volume = 0.8;
 
   playAmbianceSound();
 }
