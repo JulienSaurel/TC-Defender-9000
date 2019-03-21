@@ -45,7 +45,7 @@ function initEnemy(){
 
 ennemi = {
   x: (axeX2 / 2) - SENNEMY_WIDTH/2, // coordonnée X du canon
-  y: (axeY2 / 4) * 2.5, // coordonnée Y du canon
+  y: axeY2 - SENNEMY_HEIGHT, // coordonnée Y du canon
   width: SENNEMY_WIDTH, // largeur du canon
   height: SENNEMY_HEIGHT, // hauteur du canon
   lvl: 2,
@@ -56,18 +56,15 @@ ennemi = {
   draw: function(){
     //on dessine le canon
     startContext.drawImage(ennemi.sprite, ennemi.x, ennemi.y, ennemi.width, ennemi.height);
-
   },
 
   changeSprite: function(){
     if(ennemi.sprite === tcTwoASprite){
         ennemi.sprite = tcTwoBSprite;
-      }else{
+    }else{
       ennemi.sprite = tcTwoASprite;
     }
   },
-
-
 
   update: function(){
     if(ennemi.hp <= 0){
@@ -75,7 +72,6 @@ ennemi = {
       startButton();
     }
   },
-
 }
 
 function angleCalculator(ev){
