@@ -862,14 +862,24 @@ function shortCuts(e){
 
 //pause le jeu
 function pause(){
-  paused = true;
-  pauseMenu.classList.add("isActive");
+  if(paused === false){
+    paused = true;
+    pauseMenu.style.display = "inline";
+    setTimeout(function(){
+      pauseMenu.classList.add("isActive");
+    }, 10);
+  }
 }
 
 //désactive la pause
 function resume(){
-  pauseMenu.classList.remove("isActive");
-  paused = false;
+  if(paused === true){
+    pauseMenu.classList.remove("isActive");
+    setTimeout(function(){
+      pauseMenu.style.display = "none";
+      paused = false;
+    }, 500)
+  }
 }
 
 //fonction qui actualise les données de tous les objets du jeu

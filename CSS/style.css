@@ -86,7 +86,6 @@ html, body {
 }
 
 #pause{
-
   transition: all 0.5s linear;
   -moz-transition: all 0.5s linear;
   -webkit-transition: all 0.5s linear;
@@ -99,6 +98,7 @@ html, body {
   background-color: white;
   position: absolute;
   z-index: 15;
+  display: none;
 }
 
 #pause img {

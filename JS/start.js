@@ -67,7 +67,7 @@ ennemi = {
     }
   },
 
-  
+
 
   update: function(){
     if(ennemi.hp <= 0){
@@ -288,7 +288,7 @@ function startBullet(startPoint, pointDest){
     }
   }
 }
- 
+
 //fonction qui actualise les données de tous les objets du jeu
 function mainMenuUpdate(){
 	if(renderMainMenu === true){
@@ -331,3 +331,4 @@ function startButton(){
 loadImages();
 initCanvas();
 mainMenuRender();
+generateBackSound();

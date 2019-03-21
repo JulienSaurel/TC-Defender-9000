@@ -15,7 +15,7 @@
         <h1> Shoot the TC to start game</h1>
         <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
       </div>
-    
+
     <div id="game">
       <div>
         <canvas id="gameScreen" width="600" height="600"></canvas>
@@ -69,10 +69,10 @@
    </div>
    <div id="pause">
     <img src="../img/pause.png">
-    <input type="button" class="button" value="Resume">
+    <input onclick="resume()" type="button" class="button" value="Resume">
    </div>
   </body>
 </html>
-
+<script type="text/javascript" src="../JS/soundsHandler.js"></script>
 <script type="text/javascript" src="../JS/script.js"></script>
 <script type="text/javascript" src="../JS/start.js"></script>
