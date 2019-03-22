@@ -315,6 +315,14 @@ function mainMenuRender(){
 // initialise();
 // render();
 
+function loadStartScreen(){
+  document.getElementById("startScreen").style.display = "inline";
+  document.getElementById("startButtonDiv").style.display = "inline";
+  document.getElementById("game").style.display = "none";
+	renderMainMenu = true;
+  mainMenuRender();
+}
+
 function startButton(){
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("startButtonDiv").style.display = "none";

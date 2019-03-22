@@ -71,6 +71,13 @@
     <img src="../img/pause.png">
     <input onclick="resume()" type="button" class="button" value="Resume">
    </div>
+   <div id="gameOver">
+    <img src="../img/gameOver.png">
+    <h2>YOU LOST</h2>
+    <p id="finalScore"> Final Score : xxx </p>
+    <input onclick="GOloadStartScreen()" type="button" class="button" value="Main Menu">
+    <input onclick="GOloadGame()" type="button" class="button" value="Replay">
+   </div>
   </body>
   <audio autoplay loop  id="playAudio"><source src="../sounds/back_sound.mp3"></audio>
 </html>

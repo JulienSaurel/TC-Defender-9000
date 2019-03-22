@@ -14,6 +14,9 @@ var paraSp = document.getElementById("statusPoints");
 //pause div
 var pauseMenu = document.getElementById("pause");
 
+//gameOverDiv
+var gameOverMenu = document.getElementById("gameOver");
+
 //chemin et points
 var chemin = Array(); //array de points
 
@@ -26,8 +29,10 @@ var CANON_Y = (axeY / 2) - (CANON_HEIGHT / 2); //coordonnée Y du canon
 //bullets
 var BULLET_WIDTH = (1 / 4) * (1 / 12) * axeX; //largeur d'une bullet
 var BULLET_HEIGHT = (1 / 4) * (1 / 12) * axeY; //hauteur d'une bullet
-var BULLET_SPEED = 5; //vitesse d'une bullet
-var reloadTime = 500; //temps de rechargement (en ms) du tir
+var MAX_BULLET_SPEED = 5;
+var BULLET_SPEED = MAX_BULLET_SPEED; //vitesse d'une bullet
+var MAX_RELOAD_TIME = 500;
+var reloadTime = MAX_RELOAD_TIME; //temps de rechargement (en ms) du tir
 var bullet_damages = 1;
 var bullets = Array(); //tableau contenant toutes les bullet tirées
 
@@ -72,7 +77,7 @@ var mouseY; //position Y de la souris
 
 var wn = 1;
 var paused = false;
-var maxPlayerHP = 20
+var maxPlayerHP = 20;
 var playerHP = maxPlayerHP; //points de vies du joueur
 var statusPoints = 0;
 var score = 0;
@@ -89,7 +94,7 @@ var BULLET_SPEED_MAX = 5;
 var infiniteWaveTimer = 5000;
 var spawnables = Array();
 var wn = 1;
-
+var spawnInterval;
 //permet de charger les images en leur attribuant une source
 function loadImages(){
   bulletSprite.src = "../img/belette.png";
@@ -109,6 +114,7 @@ function loadImages(){
 
 //fonction appelée au lancement
 function initialise(){
+  resetVars();
   setCosts();
   actualiseHP();
   actualiseASDiv();
@@ -120,9 +126,16 @@ function initialise(){
   resizeCanvas(); //adapte la taille du jeu à l'ecran
   resizeDiv(); // adapate la taille de la div d'infos
   resizePauseMenu();
+  resizeGameOverMenu();
   setTimeout(function(){
     document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
   }, 100);
+  clearInterval(spawnInterval);
+  spawnInterval = undefined;
+  clearInterval(interval);
+  interval = undefined;
+  spawnables = new Array();
+  ennemies = new Array();
 }
 
 //function qui rend le jeu responsive
@@ -177,8 +190,24 @@ function resizeDiv(){
 
 function resizePauseMenu(){
   pauseMenu.style.top = canvas.height * 0.25 + "px";
-  pauseMenu.style.height = canvas.height / 2 + "px";
   pauseMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
+}
+
+function resizeGameOverMenu(){
+  gameOverMenu.style.top = canvas.height * 0.25 + "px";
+  gameOverMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
+}
+
+function resetVars(){
+  bullet_damages = 1;
+  playerHP = maxPlayerHP;
+  statusPoints = 0;
+  score = 0;
+  totalTime = 0;
+  wn = 1;
+  infiniteWaveTimer = 5000;
+  reloadTime = MAX_RELOAD_TIME;
+  BULLET_SPEED = MAX_BULLET_SPEED;
 }
 
 //fonction qui enregistre la position de la souris
@@ -688,7 +717,7 @@ function playUnlimitedWave(){
 }
 
 function playWave(wn, timeInterval){
-  let newInterval = setInterval(function(){
+  spawnInterval = setInterval(function(){
     if(paused === false){
       ennemies.push(spawnables[0]);
       spawnables.shift();
@@ -902,8 +931,37 @@ function resume(){
     setTimeout(function(){
       pauseMenu.style.display = "none";
       paused = false;
-    }, 500)
+    }, 500);
   }
+}
+
+function GOloadStartScreen(){
+  gameOverMenu.classList.remove("isActive");
+  gameOverMenu.style.display = "none";
+  loadStartScreen();
+}
+
+function GOloadGame(){
+  gameOverMenu.classList.remove("isActive");
+  gameOverMenu.style.display = "none";
+  loadGame();
+}
+
+function gameOver(){
+  playGameOverSound();
+  document.getElementById("finalScore").innerHTML = "Final Score : " + score;
+  gameOverMenu.style.display = "inline";
+  setTimeout(function(){
+    gameOverMenu.classList.add("isActive");
+  }, 10);
+}
+
+function loadGame(){
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("startButtonDiv").style.display = "none";
+  document.getElementById("game").style.display = "inline";
+  initialise();
+  render();
 }
 
 //fonction qui actualise les données de tous les objets du jeu
@@ -916,7 +974,7 @@ function update(){
     actualiseWaveNumber();
     microWave.update();
     if(winDetector() === true){
-      playGameOverSound();
+      gameOver();
       clearInterval(interval);
     }
     replaceEnnemies();

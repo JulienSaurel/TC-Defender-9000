@@ -85,6 +85,35 @@ html, body {
   width:50%;
 }
 
+#gameOver {
+  transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  opacity: 0;
+  top: 0px;
+  text-align: center;
+  border: 5px solid green;
+  width:42.5%;
+  margin: auto;
+  background-color: white;
+  position: absolute;
+  z-index: 15;
+  display: none;
+}
+
+#gameOver img {
+  margin-top:5%;
+  width: 80%;
+  height: auto;
+}
+
+#gameOver.isActive {
+  transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  opacity: 0.8;
+}
+
 #pause{
   transition: all 0.5s linear;
   -moz-transition: all 0.5s linear;
@@ -93,7 +122,6 @@ html, body {
   text-align: center;
   border: 5px solid green;
   width:42.5%;
-  height:50%;
   margin: auto;
   background-color: white;
   position: absolute;
