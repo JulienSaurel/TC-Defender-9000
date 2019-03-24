@@ -7,32 +7,87 @@
   </head>
   <body>
     <div id="startScreen">
-      <div>
-        <canvas id="canonLeft" width="600" height="600"></canvas>
-        <canvas id="canonRight" width="600" height="600"></canvas>
-        <canvas id="startCanvas" width="1200" height="1200"></canvas>
-      </div>
-      <div>
-        <h1> PRESS + TO START</h1>
-        <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
-      </div>
+      <canvas id="startCanvas" width="1200" height="1200"></canvas>
+      <canvas id="canonLeft" width="600" height="600"></canvas>
+      <canvas id="canonRight" width="600" height="600"></canvas>
     </div>
+    <div id="startButtonDiv">
+      <h1> Shoot the TC to start game</h1>
+      <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
+    </div>
+
     <div id="game">
+      <div id="buttonsDiv">
+        <div class="titleDiv">
+          <p>Actions :</p>
+        </div>
+        <div id="buttonsActions">
+          <img onclick="pauseButton()" class="plusButton" src="../img/pauseButton.png">
+          <img onclick="loadGame()" class="plusButton" src="../img/resetButton.png">
+        </div>
+        <hr>
+        <div class="caracs">
+          <p>shortCuts :</p>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Strength</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/aKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Reload Time</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/zKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Shot Speed</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/eKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Reset</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/rKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Pause</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/spaceBar.png">
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
         <canvas id="gameScreen" width="600" height="600"></canvas>
         <canvas id="canonCanvas" width="600" height="600"></canvas>
       </div>
       <div id="gameInfos">
-        <div id="titleDiv">
-          <p id="infoTitle">Caractéristiques :</p>
+        <div class="titleDiv">
+          <p>Caractéristiques :</p>
         </div>
         <div id="gamesSpecs">
-          <p id="hp">HP : 0 / 20</p>
+          <div id="hpwn">
+            <p id="hp">HP : 0 / 20</p>
+            <p id="wn">Wave : 1</p>
+          </div>
           <p id="scorePoints">Score : 0</p>
           <p id="statusPoints">Points disponibles : 0 SP</p>
         </div>
         <hr>
-        <div id="caracs">
+        <div class="caracs">
           <div class="canonCaracs">
             <div class="left">
               <p id="str">Strength : 1 / 3</p>
@@ -65,8 +120,27 @@
         </div>
       </div>
    </div>
+   <div id="pause">
+    <img src="../img/pause.png">
+    <input onclick="resume()" type="button" class="button" value="Resume">
+   </div>
+   <div id="gameOver">
+    <img src="../img/gameOver.png">
+    <h2>YOU LOST</h2>
+    <p id="finalScore"> Final Score : xxx </p>
+    <input onclick="GOloadStartScreen()" type="button" class="button" value="Main Menu">
+    <input onclick="GOloadGame()" type="button" class="button" value="Replay">
+   </div>
+   <div id="winScreen">
+     <img src="../img/winScreen.png">
+     <h2>YOU WIN</h2>
+     <p id="winFinalScore"> Final Score : xxx </p>
+     <input onclick="WINloadStartScreen()" type="button" class="button" value="Main Menu">
+     <input onclick="WINloadGame()" type="button" class="button" value="Continue in hell mode">
+   </div>
   </body>
+  <audio autoplay loop  id="playAudio"><source src="../sounds/back_sound.mp3"></audio>
 </html>
-
+<script type="text/javascript" src="../JS/soundsHandler.js"></script>
 <script type="text/javascript" src="../JS/script.js"></script>
 <script type="text/javascript" src="../JS/start.js"></script>
