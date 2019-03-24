@@ -9,6 +9,7 @@ var resumeSound;
 var gameOverSound;
 var upGradeSound;
 var notUpgradableSound;
+var winSound;
 
 var isFirstOpen = true;
 var mute = false;
@@ -46,6 +47,9 @@ function initSounds(){
 
   notUpgradableSound = new Audio("../sounds/notUpgradableSound.wav");
   notUpgradableSound.volume = 0.2;
+
+  winSound = new Audio("../sounds/winSound.wav");
+  winSound.volume = 0.4;
 
   playAmbianceSound();
 }
@@ -134,6 +138,13 @@ function playNotUpgradableSound(){
   if(mute === false){
     notUpgradableSound.currentTime = 0;
     notUpgradableSound.play();
+  }
+}
+
+function playWinSound(){
+  if(mute === false){
+    winSound.currentTime = 0;
+    winSound.play();
   }
 }
 

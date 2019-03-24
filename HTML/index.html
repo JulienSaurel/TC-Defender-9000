@@ -7,16 +7,18 @@
   </head>
   <body>
     <div id="startScreen">
-        <canvas id="startCanvas" width="1200" height="1200"></canvas>
-        <canvas id="canonLeft" width="600" height="600"></canvas>
-        <canvas id="canonRight" width="600" height="600"></canvas>
-      </div>
-      <div id="startButtonDiv">
-        <h1> Shoot the TC to start game</h1>
-        <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
-      </div>
+      <canvas id="startCanvas" width="1200" height="1200"></canvas>
+      <canvas id="canonLeft" width="600" height="600"></canvas>
+      <canvas id="canonRight" width="600" height="600"></canvas>
+    </div>
+    <div id="startButtonDiv">
+      <h1> Shoot the TC to start game</h1>
+      <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
+    </div>
 
     <div id="game">
+      <div id="buttonsDiv">
+      </div>
       <div>
         <canvas id="gameScreen" width="600" height="600"></canvas>
         <canvas id="canonCanvas" width="600" height="600"></canvas>
@@ -77,6 +79,13 @@
     <p id="finalScore"> Final Score : xxx </p>
     <input onclick="GOloadStartScreen()" type="button" class="button" value="Main Menu">
     <input onclick="GOloadGame()" type="button" class="button" value="Replay">
+   </div>
+   <div id="winScreen">
+     <img src="../img/winScreen.png">
+     <h2>YOU WIN</h2>
+     <p id="winFinalScore"> Final Score : xxx </p>
+     <input onclick="WINloadStartScreen()" type="button" class="button" value="Main Menu">
+     <input onclick="WINloadGame()" type="button" class="button" value="Continue in hell mode">
    </div>
   </body>
   <audio autoplay loop  id="playAudio"><source src="../sounds/back_sound.mp3"></audio>

@@ -17,6 +17,9 @@ var pauseMenu = document.getElementById("pause");
 //gameOverDiv
 var gameOverMenu = document.getElementById("gameOver");
 
+//winMenu
+var winScreen = document.getElementById("winScreen");
+
 //chemin et points
 var chemin = Array(); //array de points
 
@@ -49,6 +52,7 @@ var microWave_X = 3.15 / 12 * axeX;
 var microWave_Y = 4.95 / 12 * axeY;
 
 //sprites
+var animationInterval;
 var bulletSprite = new Image(); //sprite d'une bullet
 var canonASprite = new Image(); //sprite du canon lvl 1
 var canonBSprite = new Image(); //sprite du canon lvl 2
@@ -128,9 +132,12 @@ function initialise(){
   clearInterval(interval);
   interval = undefined;
 
+  clearInterval(animationInterval);
+  animationInterval = undefined;
+
   intervals.forEach(function(interv){
     clearInterval(interv);
-    interv = undefined;
+    delete interv;
   });
   spawnables = new Array();
   ennemies = new Array();
@@ -194,6 +201,11 @@ function resizePauseMenu(){
 function resizeGameOverMenu(){
   gameOverMenu.style.top = canvas.height * 0.25 + "px";
   gameOverMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
+}
+
+function resizeWinScreen(){
+  winScreen.style.top = canvas.height * 0.25 + "px";
+  winScreen.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
 function resetVars(){
@@ -603,13 +615,15 @@ function waveFour(waveLength){
 
 function playUnlimitedWave(){
   if(paused === false){
-    let rdm = Math.floor(Math.random() * 3) + 1;
-    ennemies.push(new Ennemy(rdm));
-    if(infiniteWaveTimer > 100){
-      infiniteWaveTimer -= 100;
+    if(wn === 5){
+      let rdm = Math.floor(Math.random() * 3) + 1;
+      ennemies.push(new Ennemy(rdm));
+      if(infiniteWaveTimer > 100){
+        infiniteWaveTimer -= 100;
+      }
+      setTimeout(playUnlimitedWave, infiniteWaveTimer);
     }
   }
-  setTimeout(playUnlimitedWave, infiniteWaveTimer);
 }
 
 function playWave(wn, timeInterval){
@@ -626,7 +640,7 @@ function playWave(wn, timeInterval){
 
 function playWaveNumber(wn){
   if(wn === 5){
-    playUnlimitedWave();
+    launchWinScreen();
   }else{
     if(wn === 1){
       waveOne(20);
@@ -652,19 +666,20 @@ function playGame(){
         }
       }
       if(nextWave === true){
-        wn += 1;
+        if(wn != 5){
 
-        if(wn === 2){
-          score += 10;
-        }else if(wn === 3){
-          score += 100;
-        }else if(wn === 4){
-          score += 200;
-        }else{
-          score += 400;
+          wn += 1;
+
+          if(wn === 2){
+            score += 10;
+          }else if(wn === 3){
+            score += 100;
+          }else if(wn === 4){
+            score += 200;
+          }
+          playWaveNumber(wn);
+          nextWave = false;
         }
-        playWaveNumber(wn);
-        nextWave = false;
       }
     }
   }, 10));
@@ -839,7 +854,32 @@ function GOloadGame(){
   loadGame();
 }
 
+function WINloadGame(){
+  winScreen.classList.remove("isActive");
+  setTimeout(function(){
+    winScreen.style.display = "none";
+    playUnlimitedWave();
+  }, 500);
+}
+
+function WINloadStartScreen(){
+  winScreen.classList.remove("isActive");
+  winScreen.style.display = "none";
+  loadStartScreen();
+}
+
+function launchWinScreen(){
+  resizeWinScreen();
+  playWinSound();
+  document.getElementById("winFinalScore").innerHTML = "Final Score : " + score;
+  winScreen.style.display = "inline";
+  setTimeout(function(){
+    winScreen.classList.add("isActive");
+  }, 10);
+}
+
 function gameOver(){
+  resizeWinScreen();
   playGameOverSound();
   document.getElementById("finalScore").innerHTML = "Final Score : " + score;
   gameOverMenu.style.display = "inline";
@@ -858,6 +898,11 @@ function loadGame(){
 
 //fonction qui actualise les données de tous les objets du jeu
 function update(){
+  if(winDetector() === true){
+    gameOver();
+    clearInterval(interval);
+    delete interval;
+  }
   if(paused === false){
     garbageCollector();
     actualiseHP();
@@ -865,10 +910,6 @@ function update(){
     actualiseScore();
     actualiseWaveNumber();
     microWave.update();
-    if(winDetector() === true){
-      gameOver();
-      clearInterval(interval);
-    }
     replaceEnnemies();
     replaceCanon();
     replaceBullets();
@@ -924,7 +965,7 @@ function draw(){
 function render(){
   playGame();
 
-  interval = setInterval(function(){
+  animationInterval = setInterval(function(){
     animateEnnemies();
   }, 750);
 
