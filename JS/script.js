@@ -11,6 +11,8 @@ var axeY = canvas.height;
 var infoDiv = document.getElementById("gameInfos");
 var paraSp = document.getElementById("statusPoints");
 
+var buttonsDiv = document.getElementById("buttonsDiv");
+
 //pause div
 var pauseMenu = document.getElementById("pause");
 
@@ -119,6 +121,15 @@ function initialise(){
   actualiseSSDiv();
   actualiseSTRDiv();
   loadImages(); // charge les images
+  window.addEventListener('resize', function(){
+    resizeCanvas();
+    replaceCanon();
+    replaceBullets();
+    replaceEnnemies();
+    resizeDiv();
+    resizeWinScreen();
+    resizeGameOverMenu();
+  }, false);
   document.addEventListener("keydown", shortCuts, false);
   document.addEventListener("mousemove", mouseMoveHandler, false); //listener pour le mouvement de la souris
   resizeCanvas(); //adapte la taille du jeu à l'ecran
@@ -146,10 +157,10 @@ function initialise(){
 //function qui rend le jeu responsive
 function resizeCanvas() {
   //ajustement de la taille du canvas en fonction des dimensions de l'écran
-  canvas.style.left = window.innerWidth * 0.125 + "px";
+  canvas.style.left = window.innerWidth * 0.25 + "px";
   canvas.width = window.innerWidth * 0.5;
   canvas.height = window.innerWidth * 0.5;
-  canvasCanon.style.left = window.innerWidth * 0.125 + "px";
+  canvasCanon.style.left = window.innerWidth * 0.25 + "px";
   canvasCanon.width = window.innerWidth * 0.5;
   canvasCanon.height = window.innerWidth * 0.5;
 
@@ -188,9 +199,12 @@ function resizeCanvas() {
 
 //permet de placer et de redimensionner la div d'infos
 function resizeDiv(){
-  infoDiv.style.left = window.innerWidth * 0.5 + window.innerWidth * 0.125 + "px";
+  infoDiv.style.left = window.innerWidth * 0.75 + "px";
   infoDiv.style.width = window.innerWidth * 0.25 + "px";
   infoDiv.style.height = window.innerWidth * 0.5 + "px";
+
+  buttonsDiv.style.width = window.innerWidth * 0.25 + "px";
+  buttonsDiv.style.height = window.innerWidth * 0.5 + "px";
 }
 
 function resizePauseMenu(){
@@ -223,7 +237,7 @@ function resetVars(){
 //fonction qui enregistre la position de la souris
 function mouseMoveHandler(e) {
   //calcul de la position de la souris en fonction du centre du canon
-  mouseX = e.clientX - CANON_WIDTH / 2 - window.innerWidth * 0.125;
+  mouseX = e.clientX - CANON_WIDTH / 2 - window.innerWidth * 0.25;
   mouseY = e.clientY - CANON_HEIGHT / 2;
 
   //calcul de l'angle en fonction du centre du canon et de la souris
@@ -278,25 +292,26 @@ canon = {
   shoot: function(e){
     //on vérifie que le canon puisse tirer
     if(canon.canShoot === true){
-      playShootSound();
-      //on dit que le canon ne peut plus tirer
-      canon.canShoot = false;
+      if(paused === false){
+        playShootSound();
+        //on dit que le canon ne peut plus tirer
+        canon.canShoot = false;
 
-      //on enregistre les coordonnée du click de souris
-      let mouseClickX = e.clientX - window.innerWidth * 0.125;
-      let mouseClickY = e.clientY;
+        //on enregistre les coordonnée du click de souris
+        let mouseClickX = e.clientX - window.innerWidth * 0.25;
+        let mouseClickY = e.clientY;
 
-      //on créer un point en fonction de ces coordonnées
-      pointDest = {x: mouseClickX, y: mouseClickY};
+        //on créer un point en fonction de ces coordonnées
+        pointDest = {x: mouseClickX, y: mouseClickY};
 
-      //on instancie une nouvelle bullet à l'aide de ce point
-      bullets.push(new Bullet(pointDest));
+        //on instancie une nouvelle bullet à l'aide de ce point
+        bullets.push(new Bullet(pointDest));
 
-
-      //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
-      setTimeout(function(){
-        canon.canShoot = true;
-      }, reloadTime);
+        //on dit qu'après le temps de rechargement, le canon peut de nouveau tirer
+        setTimeout(function(){
+          canon.canShoot = true;
+        }, reloadTime);
+      }
     }
   },
 }
@@ -337,10 +352,23 @@ function replaceEnnemies(){
   ENNEMY_WIDTH = (1 / 12) * 0.625 * axeX;
   ENNEMY_HEIGHT = (1 / 12) * 0.625 * axeY;
   ENNEMY_SPEED = (axeX / 12) / 50;
+  spawnables.forEach(function(ennemy){
+    if(ennemy != undefined){
+      ennemy.width = ENNEMY_WIDTH;
+      ennemy.height = ENNEMY_HEIGHT;
+      ennemy.speed = ENNEMY_SPEED;
+      ennemy.x = chemin[ennemy.actualPoint].x;
+      ennemy.y = chemin[ennemy.actualPoint].y;
+    }
+  });
+
   ennemies.forEach(function(ennemy){
     if(ennemy != undefined){
       ennemy.width = ENNEMY_WIDTH;
       ennemy.height = ENNEMY_HEIGHT;
+      ennemy.speed = ENNEMY_SPEED;
+      ennemy.x = chemin[ennemy.actualPoint].x;
+      ennemy.y = chemin[ennemy.actualPoint].y;
     }
   });
 }
@@ -815,7 +843,16 @@ function shortCuts(e){
     }else{
       pause();
     }
+  }else if(e.key === "a"){
+    buttonSTR();
+  }else if(e.key === "z"){
+    buttonAS();
+  }else if(e.key === "e"){
+    buttonSS();
+  }else if(e.key === "r"){
+    loadGame();
   }
+
 }
 
 //pause le jeu
@@ -827,6 +864,14 @@ function pause(){
     setTimeout(function(){
       pauseMenu.classList.add("isActive");
     }, 10);
+  }
+}
+
+function pauseButton(){
+  if(paused === true){
+    resume();
+  }else{
+    pause();
   }
 }
 
@@ -889,6 +934,7 @@ function gameOver(){
 }
 
 function loadGame(){
+  playResumeSound();
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("startButtonDiv").style.display = "none";
   document.getElementById("game").style.display = "inline";
@@ -910,7 +956,6 @@ function update(){
     actualiseScore();
     actualiseWaveNumber();
     microWave.update();
-    replaceEnnemies();
     replaceCanon();
     replaceBullets();
     canon.update();

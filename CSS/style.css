@@ -66,15 +66,21 @@ html, body {
   position:absolute;
 }
 
-#titleDiv {
+#buttonsDiv {
+  display: flex;
+  flex-direction: column;
+  position:absolute;
+}
+
+.titleDiv {
   margin-top: 5%;
   text-align: center;
 }
 
-#caracs {
+.caracs {
   display: flex;
   flex-direction: column;
-  height: 70%;
+  height: 75%;
 }
 
 #hpwn {
@@ -171,6 +177,16 @@ html, body {
   opacity: 0.8;
 }
 
+#buttonsActions {
+  display: flex;
+  height: 15%;
+  align-items: center;
+}
+
+#buttonsActions img {
+  width:30%;
+}
+
 .button {
   background-color: green;
   border: none;
@@ -192,17 +208,18 @@ hr {
 
 .left {
   height: 100%;
-  width: 70%;
+  width: 50%;
 }
 
 .right {
   height: 100%;
   display: flex;
-  width: 30%;
+  width: 50%;
 }
 
 .plusButton {
   margin: auto;
+  height: 100%;
   width: 100%;
 }
 

@@ -18,14 +18,65 @@
 
     <div id="game">
       <div id="buttonsDiv">
+        <div class="titleDiv">
+          <p>Actions :</p>
+        </div>
+        <div id="buttonsActions">
+          <img onclick="pauseButton()" class="plusButton" src="../img/pauseButton.png">
+          <img onclick="loadGame()" class="plusButton" src="../img/resetButton.png">
+        </div>
+        <hr>
+        <div class="caracs">
+          <p>shortCuts :</p>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Strength</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/aKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Reload Time</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/zKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Shot Speed</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/eKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Reset</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/rKey.png">
+            </div>
+          </div>
+          <div class="canonCaracs">
+            <div class="left">
+              <p>Pause</p>
+            </div>
+            <div class="right">
+              <img class="plusButton" src="../img/spaceBar.png">
+            </div>
+          </div>
+        </div>
       </div>
       <div>
         <canvas id="gameScreen" width="600" height="600"></canvas>
         <canvas id="canonCanvas" width="600" height="600"></canvas>
       </div>
       <div id="gameInfos">
-        <div id="titleDiv">
-          <p id="infoTitle">Caractéristiques :</p>
+        <div class="titleDiv">
+          <p>Caractéristiques :</p>
         </div>
         <div id="gamesSpecs">
           <div id="hpwn">
@@ -36,7 +87,7 @@
           <p id="statusPoints">Points disponibles : 0 SP</p>
         </div>
         <hr>
-        <div id="caracs">
+        <div class="caracs">
           <div class="canonCaracs">
             <div class="left">
               <p id="str">Strength : 1 / 3</p>
