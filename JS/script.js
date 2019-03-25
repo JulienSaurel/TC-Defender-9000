@@ -741,7 +741,7 @@ function actualiseScore(){
 }
 
 function actualiseStatusPoints(){
-  document.getElementById("statusPoints").innerHTML = "Points disponibles : " + statusPoints + " SP";
+  document.getElementById("statusPoints").innerHTML = "Status Points : " + statusPoints + " SP";
 }
 
 function actualiseWaveNumber(){
