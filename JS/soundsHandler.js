@@ -174,4 +174,34 @@ function unmuteSound(){
   unmuteBackground();
 }
 
+function globalSound(){
+  if(mute == true){
+    unmuteSound();
+    //document.getElementById('globalsound').value = "Global sounds off";
+  }else{
+    muteSound();
+    //document.getElementById('globalsound').value = "Global sounds on";
+  }
+}
+
+function interfaceSound(){
+  if(mute == true){
+    unmuteInterface();
+    //document.getElementById('interfacesound').value = "Interface sounds off";
+  }else{
+    muteInterface();
+    //document.getElementById('interfacesound').value = "Interface sounds on";
+  }
+}
+
+function musicSound(){
+  if(mute == true){
+    unmuteBackground();
+    //document.getElementById('musicsound').value = "Music sounds off";
+  }else{
+    muteBackground();
+    //document.getElementById('musicsound').value = "Music sounds on";
+  }
+}
+
 initSounds();
