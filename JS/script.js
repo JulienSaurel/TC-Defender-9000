@@ -677,7 +677,7 @@ function playWaveNumber(wn){
     }else if(wn === 3){
       waveThree(50);
     }else if(wn === 4){
-      waveFour(100);
+      waveFour(60);
     }
     playWave(wn, 1500);
   }
@@ -1008,6 +1008,7 @@ function draw(){
 
 //fonction qui effectue le rendu du jeu (update + draw)
 function render(){
+  //lancement du jeu
   playGame();
 
   animationInterval = setInterval(function(){
