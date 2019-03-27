@@ -3,7 +3,7 @@ let low_score;
 let select_score;
 
 function myajax(stringScore, callback) {
-    var url = "../php/scoreRequest.php?action=" + stringScore;
+    var url = "../php/index.php?action=" + stringScore;
     var requete = new XMLHttpRequest();
     requete.open("GET", url, true);
     if (callback != null) {
@@ -21,7 +21,7 @@ function callback_score_all(req) {
     tabObj.forEach(element => {
         tabScore.push(new Array(element.pseudo, element.score));
     })
-    tab = tabScore;
+    tab_score = tabScore;
 }
 
 function callback_score_low(req) {
@@ -34,7 +34,7 @@ function callback_score_select(req) {
 
 // Stocke dans tab_score la liste des 10 premier scores
 function score_list() {
-    myajax("list", callback_score_all);
+    myajax("readAll", callback_score_all);
 }
 
 // Stock dans low_score le score le plus bas
@@ -49,7 +49,7 @@ function score_select(nick) {
 
 // Ajoute une nouvelle entrée dans la bdd
 function score_new(nick, score) {
-    myajax("reg&pseudo=" + nick + "&score=" + score, null);
+    myajax("create&pseudo=" + nick + "&score=" + score, null);
 }
 
 // Met a jour une entrée de la bdd
@@ -72,8 +72,8 @@ function score_add(nick, score) {
 function score(score) {
     score_low();
     if (score > low_score) {
-        let rep = prompt("Veuillez donner votre pseudo", "anonyme");
-        if (rep != null) {
+        let rep = prompt("Veuillez donner votre pseudo");
+        if (rep != null && rep != "") {
             score_select(rep);
             if (select_score && select_score.score < score) {
                 score_add(rep, score);
@@ -83,3 +83,5 @@ function score(score) {
         }
     }
 }
+
+score_low();
