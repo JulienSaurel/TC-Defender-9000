@@ -1,16 +1,16 @@
 //canvas vars
-var canvas = document.getElementById("gameScreen");
-var context = canvas.getContext("2d");
-var canvasCanon = document.getElementById("canonCanvas");
-var contextCanon = canvasCanon.getContext("2d");
-resizeCanvas();
-var axeX = canvas.width;
-var axeY = canvas.height;
+var canvas = document.getElementById("gameScreen"); //récupération du canvas principal
+var context = canvas.getContext("2d"); //récupération du contexte du canvas principal
+var canvasCanon = document.getElementById("canonCanvas"); //récupération du canvas du canon
+var contextCanon = canvasCanon.getContext("2d"); //récupération du contexte du canvas du canon
+var axeX = canvas.width; //création d'un axe X
+var axeY = canvas.height; //création d'un axe Y
 
 //infoDivVar
 var infoDiv = document.getElementById("gameInfos");
 var paraSp = document.getElementById("statusPoints");
 
+//div buttons
 var buttonsDiv = document.getElementById("buttonsDiv");
 
 //pause div
@@ -34,11 +34,11 @@ var CANON_Y = (axeY / 2) - (CANON_HEIGHT / 2); //coordonnée Y du canon
 //bullets
 var BULLET_WIDTH = (1 / 4) * (1 / 12) * axeX; //largeur d'une bullet
 var BULLET_HEIGHT = (1 / 4) * (1 / 12) * axeY; //hauteur d'une bullet
-var MAX_BULLET_SPEED = 5;
+var MAX_BULLET_SPEED = 5; //vitesse maximale d'une bullet
 var BULLET_SPEED = MAX_BULLET_SPEED; //vitesse d'une bullet
-var MAX_RELOAD_TIME = 500;
+var MAX_RELOAD_TIME = 500; //temps de rechargement maximal du tir (en s)
 var reloadTime = MAX_RELOAD_TIME; //temps de rechargement (en ms) du tir
-var bullet_damages = 1;
+var bullet_damages = 1; //dégats des balles
 var bullets = Array(); //tableau contenant toutes les bullet tirées
 
 //ennemies
@@ -48,13 +48,13 @@ var ENNEMY_SPEED = (axeX / 12) / 50; //vitesse d'un ennemi
 var ennemies = Array(); //tableau contenant tous les ennemis
 
 //micro onde
-var microWave_WIDTH = 0.925 / 12 * axeX;
-var microWave_HEIGHT = 0.925 / 12 * axeY;
-var microWave_X = 3.15 / 12 * axeX;
-var microWave_Y = 4.95 / 12 * axeY;
+var microWave_WIDTH = 0.925 / 12 * axeX; //largeur du micro-onde
+var microWave_HEIGHT = 0.925 / 12 * axeY; //hauteur du micro-onde
+var microWave_X = 3.15 / 12 * axeX; //coordonnée x du micro-onde
+var microWave_Y = 4.95 / 12 * axeY; //coordonnée y du micro-onde
 
 //sprites
-var animationInterval;
+var animationInterval; //intervale d'animation
 var bulletSprite = new Image(); //sprite d'une bullet
 var canonASprite = new Image(); //sprite du canon lvl 1
 var canonBSprite = new Image(); //sprite du canon lvl 2
@@ -66,7 +66,7 @@ var tcTwoASprite = new Image(); //sprite du TC lvl 2 tourné dans un sens
 var tcTwoBSprite = new Image(); //sprite du TC lvl 2 tourné dans l'autre sens
 var tcThreeASprite = new Image(); //sprite du TC lvl 3 tourné dans un sens
 var tcThreeBSprite = new Image(); //sprite du TC lvl 3 tourné dans l'autre sens
-var microWaveSprite = new Image();
+var microWaveSprite = new Image(); //sprite du micro-onde
 
 //position de la souris
 var angle; //angle (en rad) entre le centre du canon et la position de la souris (recalculé en permanence)
@@ -74,27 +74,25 @@ var mouseX; //position X de la souris
 var mouseY; //position Y de la souris
 
 //partie en général
-
-var wn = 1;
-var paused = false;
-var maxPlayerHP = 20;
+var paused = false; //pause en cours ou non
+var maxPlayerHP = 20; //points de vies maximums du joueur
 var playerHP = maxPlayerHP; //points de vies du joueur
-var statusPoints = 0;
-var score = 0;
-var totalTime = 0;
-var interval;
-var STRENGTH_COST = 20;
-var STRENGTH_MAX = 3;
-var RELOAD_TIME_COST = 50;
-var RELOAD_TIME_MAX = 3;
-var BULLET_SPEED_COST = 10;
-var BULLET_SPEED_MAX = 5;
+var statusPoints = 0; //points de status du joueur
+var score = 0; //score du joueur
+var interval; //intervale de la partie
+var totalPoints = 0; //total des SP dépensés
+var STRENGTH_COST = 20; //cout d'un niveau de dégats
+var STRENGTH_MAX = 3; //nombre maximum de points dans la force
+var RELOAD_TIME_COST = 50; //cout d'un niveau de reload time
+var RELOAD_TIME_MAX = 3; //nombre de points maximal dans le reload time
+var BULLET_SPEED_COST = 10; //cout d'un niveau de vitesse
+var BULLET_SPEED_MAX = 5; //nombre de points maximal dans la vitesse
 
 //waves
-var infiniteWaveTimer = 5000;
-var spawnables = Array();
-var wn = 1;
-var intervals = Array();;
+var infiniteWaveTimer = 5000; //temps de recahrge de la vague infinie
+var spawnables = Array(); //ennemis à faire apparaitres
+var wn = 1; //numéro de la vague en cours
+var intervals = Array(); //toutes les intervales des vagues
 
 //permet de charger les images en leur attribuant une source
 function loadImages(){
@@ -120,8 +118,9 @@ function initialise(){
   actualiseASDiv();
   actualiseSSDiv();
   actualiseSTRDiv();
-  loadImages(); // charge les images
-  window.addEventListener('resize', function(){
+  loadImages();
+
+  window.addEventListener('resize', function(){ //listener pour le redimensionnement
     resizeCanvas();
     replaceCanon();
     replaceBullets();
@@ -129,8 +128,11 @@ function initialise(){
     resizeDiv();
     resizeWinScreen();
     resizeGameOverMenu();
+    resizePauseMenu();
   }, false);
-  document.addEventListener("keydown", shortCuts, false);
+
+  document.addEventListener("keydown", shortCuts, false); //listener pour les raccourcis clavier
+
   document.addEventListener("mousemove", mouseMoveHandler, false); //listener pour le mouvement de la souris
   resizeCanvas(); //adapte la taille du jeu à l'ecran
   resizeDiv(); // adapate la taille de la div d'infos
@@ -140,16 +142,17 @@ function initialise(){
     document.addEventListener("click", canon.shoot, false); //listener pour le click de souris
   }, 100);
 
+  //réinitialisation des intervalles
   clearInterval(interval);
   interval = undefined;
-
   clearInterval(animationInterval);
   animationInterval = undefined;
-
   intervals.forEach(function(interv){
     clearInterval(interv);
     delete interv;
   });
+
+  //réinitialisation des tableaux
   spawnables = new Array();
   ennemies = new Array();
 }
@@ -207,22 +210,27 @@ function resizeDiv(){
   buttonsDiv.style.height = window.innerWidth * 0.5 + "px";
 }
 
+//permet de placer et de redimensionner le menu de pause
 function resizePauseMenu(){
   pauseMenu.style.top = canvas.height * 0.25 + "px";
   pauseMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
+//permet de placer et de redimensionner le menu de game over
 function resizeGameOverMenu(){
   gameOverMenu.style.top = canvas.height * 0.25 + "px";
   gameOverMenu.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
+//permet de placer et de redimensionner le menu de victoire
 function resizeWinScreen(){
   winScreen.style.top = canvas.height * 0.25 + "px";
   winScreen.style.left = canvas.style.left.replace("px", "") * 1 + (0.0625 * canvas.width)  + "px";
 }
 
+//réinitialise toites les variables
 function resetVars(){
+  totalPoints = 0;
   bullet_damages = 1;
   playerHP = maxPlayerHP;
   statusPoints = 0;
@@ -255,8 +263,8 @@ canon = {
   height: CANON_HEIGHT, // hauteur du canon
   angle: 0, //orientation du canon
   canShoot: true, //variable vérifiant si le canon est en rechargement
-  lvl: 1,
-  sprite: canonASprite,
+  lvl: 1, //niveau du canon
+  sprite: canonASprite, //sprite du canon
   // fonction qui dessine le canon
   draw: function(){
     //on dessine le canon
@@ -277,6 +285,19 @@ canon = {
 
   //fonction permettant d'actualiser les données du canon
   update: function(){
+
+    //définition du niveau du canon en fonction des points dépensés
+    if(totalPoints > 2 ){
+      this.lvl = 2;
+    }
+    if(totalPoints > 5 ){
+      this.lvl = 3;
+    }
+    if(totalPoints > 9){
+      this.lvl = 4;
+    }
+
+    //définition du sprite en fonction du niveau
     if(canon.lvl === 1){
       canon.sprite = canonASprite;
     }else if(canon.lvl === 2){
@@ -316,14 +337,16 @@ canon = {
   },
 }
 
+//micro-onde
 microWave = {
-  x: microWave_X,
-  y: microWave_Y,
-  width: microWave_WIDTH,
-  height: microWave_HEIGHT,
-  sprite: microWaveSprite,
+  x: microWave_X, //coordonnée X du micro-onde
+  y: microWave_Y, //coordonnée Y du micro-onde
+  width: microWave_WIDTH, //largeur du micro-ondes
+  height: microWave_HEIGHT, //hauteur du micro-onde
+  sprite: microWaveSprite, //sprite du micro-onde
 
   update: function(){
+    //redéfinition de la taille et position du micro-onde
     microWave_WIDTH = 0.925 / 12 * axeX;
     microWave.width = microWave_WIDTH;
     microWave_HEIGHT = 0.925 / 12 * axeY;
@@ -335,6 +358,7 @@ microWave = {
   },
 
   draw: function(){
+    //dessin du micro-onde
     context.drawImage(microWave.sprite, microWave.x, microWave.y, microWave.width, microWave.height);
   }
 }
@@ -412,6 +436,7 @@ function objectToPoint(object, point) {
   }
 }
 
+//fonction qui permet de tirer une bullet dans la direction du canon
 function shootBullet(object, point){
   let AC = point.y - (canon.x + canon.width / 2);
   let CB = point.x - (canon.y + canon.height / 2);
@@ -526,6 +551,8 @@ function Ennemy(lvl){
 
   //fonction qui actualise les caractéristiques d'un ennemi
   this.update = function(){
+
+    //gestion de la perte de points de vies
     if(this.actualPoint === (chemin.length - 1) && this.x === chemin[chemin.length - 1].x && this.y === chemin[chemin.length - 1].y){
       if(this.active === true){
         playLostHPSound();
@@ -533,6 +560,8 @@ function Ennemy(lvl){
       }
       this.active = false;
     }
+
+    //gestion de la défaite
     if(this.hp <= 0){
       if(this.active === true){
         score += this.lvl;
@@ -541,6 +570,8 @@ function Ennemy(lvl){
       playEnnemyDyingSound();
       this.active = false;
     }
+
+    //gestion du déplacement
     if(this.totalMove > 0){
       this.x += this.speedX;
       this.y += this.speedY;
@@ -607,12 +638,14 @@ function winDetector(){
   }
 }
 
+//génération des ennemis de la première vague
 function waveOne(waveLength){
   for (var i = 0; i < waveLength; i++) {
     spawnables.push(new Ennemy(1));
   }
 }
 
+//génération des ennemis de la seconde vague
 function waveTwo(waveLength){
   for (var i = 0; i < waveLength; i++) {
     spawnables.push(new Ennemy(1));
@@ -622,6 +655,7 @@ function waveTwo(waveLength){
   }
 }
 
+//génération des ennemis de la troisième vague
 function waveThree(waveLength){
   for (var i = 0; i < waveLength; i++) {
     spawnables.push(new Ennemy(1));
@@ -632,6 +666,7 @@ function waveThree(waveLength){
   }
 }
 
+//génération des ennemis de la quatrième vague
 function waveFour(waveLength){
   for (var i = 0; i < waveLength; i++) {
     spawnables.push(new Ennemy(1));
@@ -641,19 +676,26 @@ function waveFour(waveLength){
   }
 }
 
+//génération de la vague infinie
 function playUnlimitedWave(){
   if(paused === false){
     if(wn === 5){
+      //on génère un ennemi aléatoire
       let rdm = Math.floor(Math.random() * 3) + 1;
       ennemies.push(new Ennemy(rdm));
+
+      //on diminue le temps de réapparition
       if(infiniteWaveTimer > 100){
         infiniteWaveTimer -= 100;
       }
+
+      //on rapelle la fonction
       setTimeout(playUnlimitedWave, infiniteWaveTimer);
     }
   }
 }
 
+//permet de jouer une vague
 function playWave(wn, timeInterval){
    intervals.push(setInterval(function(){
     if(paused === false){
@@ -666,6 +708,8 @@ function playWave(wn, timeInterval){
   }, timeInterval));
 }
 
+
+//permet de jouer une vague en focntion d'un numéro
 function playWaveNumber(wn){
   if(wn === 5){
     launchWinScreen();
@@ -683,21 +727,29 @@ function playWaveNumber(wn){
   }
 }
 
+//joue le jeu en entier
 function playGame(){
+  //on joue la première vague
   playWaveNumber(wn);
-    intervals.push(setInterval(function(){
+
+  //on lance le reste du jeu
+  intervals.push(setInterval(function(){
+
+    //quand plus aucun ennemis ne doit apparaitre
     if(spawnables.length === 0){
+
+      //si plus aucun ennemi n'est rpésent sur la carte
       let nextWave = true;
       for (var i = 0; i < ennemies.length; i++) {
         if(ennemies[i] != undefined && ennemies[i].active === true){
           nextWave = false;
         }
       }
+
+      //on joue la prochaine vague
       if(nextWave === true){
         if(wn != 5){
-
           wn += 1;
-
           if(wn === 2){
             score += 10;
           }else if(wn === 3){
@@ -713,6 +765,7 @@ function playGame(){
   }, 10));
 }
 
+//fonction permettant de détruire les variables inutiles
 function garbageCollector(){
   for (var i = 0; i < ennemies.length; i++) {
     if(ennemies[i] != undefined && ennemies[i].active === false)
@@ -732,18 +785,16 @@ function garbageCollector(){
 
 }
 
+//actualise les différents paragraphes des menus
 function actualiseHP(){
   document.getElementById("hp").innerHTML = "HP : " + playerHP + " / " + maxPlayerHP;
 }
-
 function actualiseScore(){
   document.getElementById("scorePoints").innerHTML = "Score : " + score;
 }
-
 function actualiseStatusPoints(){
   document.getElementById("statusPoints").innerHTML = "Status Points : " + statusPoints + " SP";
 }
-
 function actualiseWaveNumber(){
   let waneNum = document.getElementById("wn");
   if(wn !== 5){
@@ -757,11 +808,9 @@ function actualiseWaveNumber(){
 function increaseAttackSpeed(as){
   reloadTime -= as;
 }
-
 function actualiseASDiv(){
   document.getElementById("rt").innerHTML = "Reload Time : " + ((500 - reloadTime) / 100) + " / " + RELOAD_TIME_MAX;
 }
-
 function buttonAS(){
   if(statusPoints >= RELOAD_TIME_COST && reloadTime - RELOAD_TIME_MAX > 200){
     playUpgradeSound();
@@ -769,6 +818,7 @@ function buttonAS(){
     increaseAttackSpeed(100);
     actualiseASDiv();
     actualiseStatusPoints();
+    totalPoints += 1;
   }else{
     playNotUpgradableSound();
   }
@@ -778,11 +828,9 @@ function buttonAS(){
 function increaseShootingSpeed(ss){
   BULLET_SPEED += ss;
 }
-
 function actualiseSSDiv(){
   document.getElementById("ss").innerHTML = "Shot Speed : " + (BULLET_SPEED - 5) + " / " + BULLET_SPEED_MAX;
 }
-
 function buttonSS(){
   if(statusPoints >= BULLET_SPEED_COST && BULLET_SPEED - BULLET_SPEED_MAX < BULLET_SPEED_MAX){
     playUpgradeSound();
@@ -790,6 +838,7 @@ function buttonSS(){
     increaseShootingSpeed(1);
     actualiseSSDiv();
     actualiseStatusPoints();
+    totalPoints += 1;
   }else{
     playNotUpgradableSound();
   }
@@ -799,11 +848,9 @@ function buttonSS(){
 function increasestrengh(s){
   bullet_damages += s;
 }
-
 function actualiseSTRDiv(){
   document.getElementById("str").innerHTML = "Strength : " + bullet_damages + " / " + STRENGTH_MAX;
 }
-
 function buttonSTR(){
   if(statusPoints >= STRENGTH_COST && bullet_damages < STRENGTH_MAX){
     playUpgradeSound();
@@ -811,11 +858,13 @@ function buttonSTR(){
     increasestrengh(1);
     actualiseSTRDiv();
     actualiseStatusPoints();
+    totalPoints += 1;
   }else{
     playNotUpgradableSound();
   }
 }
 
+//permet d'attribuer les bon prix
 function setCosts(){
   document.getElementById("strCost").innerHTML = "Cost : " + STRENGTH_COST + " SP";
   document.getElementById("rtCost").innerHTML = "Cost : " + RELOAD_TIME_COST + " SP";
@@ -836,6 +885,7 @@ function afficherStatusPoints(){
   paraSp.innerHTML = "Points disponibles : " + statusPoints;
 }
 
+//gère les raccourcis clavier
 function shortCuts(e){
   if(e.code === "Space"){
     if(paused === true){
@@ -852,7 +902,6 @@ function shortCuts(e){
   }else if(e.key === "r"){
     loadGame();
   }
-
 }
 
 //pause le jeu
@@ -867,6 +916,7 @@ function pause(){
   }
 }
 
+//gère le bouton de pause
 function pauseButton(){
   if(paused === true){
     resume();
@@ -887,18 +937,21 @@ function resume(){
   }
 }
 
+//charge le menu principal depuis le menu game over
 function GOloadStartScreen(){
   gameOverMenu.classList.remove("isActive");
   gameOverMenu.style.display = "none";
   loadStartScreen();
 }
 
+//charge le jeu depuis le menu game over
 function GOloadGame(){
   gameOverMenu.classList.remove("isActive");
   gameOverMenu.style.display = "none";
   loadGame();
 }
 
+//charge le jeu depuis le menu de victoire
 function WINloadGame(){
   winScreen.classList.remove("isActive");
   setTimeout(function(){
@@ -907,12 +960,14 @@ function WINloadGame(){
   }, 500);
 }
 
+//charge le menu principal depuis le menu de victoire
 function WINloadStartScreen(){
   winScreen.classList.remove("isActive");
   winScreen.style.display = "none";
   loadStartScreen();
 }
 
+//charge le menu de victoire
 function launchWinScreen(){
   resizeWinScreen();
   playWinSound();
@@ -923,6 +978,7 @@ function launchWinScreen(){
   }, 10);
 }
 
+//charge le menu game over
 function gameOver(){
   resizeWinScreen();
   playGameOverSound();
@@ -933,6 +989,7 @@ function gameOver(){
   }, 10);
 }
 
+//charge le jeu
 function loadGame(){
   playResumeSound();
   document.getElementById("startScreen").style.display = "none";
