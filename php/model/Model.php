@@ -96,6 +96,7 @@ class Model
                 "score_tag" => $score,
             );
             $rep_prep->execute($values);
+            Model::purge();
         } catch (PDOException $e) {
             echo $e->getMessage();
             die("Problème lors de la connexion à la base de données.");
@@ -129,6 +130,23 @@ class Model
             return $score->idHI;
         }
         return false;
+    }
+
+    // Garde le nombre d'entrée de la base de donné a 10
+    public static function purge()
+    {
+        $ls = Model::lowerScore();
+        try {
+            $sql = "DELETE FROM tcd9k_score WHERE score < :ls_tag";
+            $values = array(
+                "ls_tag" => $ls,
+            );
+            $rep_prep = self::$pdo->prepare($sql);
+            $rep_prep->execute($values);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Problème lors de la connexion à la base de données.");
+        }
     }
 }
 

@@ -3,8 +3,8 @@ let low_score;
 let select_score;
 
 function myajax(stringScore, callback) {
-    var url = "../php/index.php?action=" + stringScore;
-    var requete = new XMLHttpRequest();
+    let url = "../php/index.php?action=" + stringScore;
+    let requete = new XMLHttpRequest();
     requete.open("GET", url, true);
     if (callback != null) {
         requete.addEventListener("load", function () {
@@ -39,7 +39,14 @@ function score_list() {
 
 // Stock dans low_score le score le plus bas
 function score_low() {
-    myajax("low", callback_score_low);
+    let url = "../php/index.php?action=low";
+    let requete = new XMLHttpRequest();
+    // Travail en synchrone pour avoir le bon dernier score
+    requete.open("GET", url, false);
+    requete.addEventListener("load", function () {
+        callback_score_low(requete);
+    });
+    requete.send(null);
 }
 
 // Stock dans score_select les stat du joueur de pseudo nick
@@ -83,5 +90,3 @@ function score(score) {
         }
     }
 }
-
-score_low();
