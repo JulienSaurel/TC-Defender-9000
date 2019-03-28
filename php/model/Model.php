@@ -116,7 +116,7 @@ class Model
         } else {
             for ($i = 9; $i >= 0; $i--) {
                 if (isset($tab[$i])) {
-                    return $tab[$i];
+                    return $tab[$i]->score;
                 }
             }
         }
