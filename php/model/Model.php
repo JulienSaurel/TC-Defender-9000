@@ -5,6 +5,7 @@ class Model
 {
 
     public static $pdo;
+    private $debug = true;
 
     public static function init_pdo()
     {
@@ -20,7 +21,9 @@ class Model
             // on active le mode d'affichage des erreurs, et le lancement d'exception en cas d'erreur
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($debug) {
+                echo $e->getMessage();
+            }
             die("Problème lors de la connexion à la base de données.");
         }
     }
@@ -44,7 +47,9 @@ class Model
                 return $tab[0];
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($debug) {
+                echo $e->getMessage();
+            }
             die("Problème lors de la connexion à la base de données.");
         }
     }
@@ -60,7 +65,9 @@ class Model
             $tab = $rep_prep->fetchAll();
             return $tab;
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($debug) {
+                echo $e->getMessage();
+            }
             die("Problème lors de la connexion à la base de données.");
         }
     }
@@ -79,7 +86,9 @@ class Model
                 );
                 $rep_prep->execute($values);
             } catch (PDOException $e) {
-                echo $e->getMessage();
+                if ($debug) {
+                    echo $e->getMessage();
+                }
                 die("Problème lors de la connexion à la base de données.");
             }
         }
@@ -98,7 +107,9 @@ class Model
             $rep_prep->execute($values);
             Model::purge();
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($debug) {
+                echo $e->getMessage();
+            }
             die("Problème lors de la connexion à la base de données.");
         }
     }
@@ -151,11 +162,13 @@ class Model
             $rep_prep = self::$pdo->prepare($sql);
             $rep_prep->execute($values);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($debug) {
+                echo $e->getMessage();
+            }
             die("Problème lors de la connexion à la base de données.");
         }
     }
 }
 
-// on initialise la connexion $pdo
+// On initialise la connexion $pdo
 Model::init_pdo();

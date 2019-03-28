@@ -56,7 +56,6 @@ function score_low() {
 
 // Stock dans score_select les stat du joueur de pseudo nick
 function score_select(nick) {
-    // myajax("select&pseudo=" + nick, callback_score_select);
     let url = "../php/index.php?action=select&pseudo=" + nick;
     let requete = new XMLHttpRequest();
     requete.open("GET", url, false);
