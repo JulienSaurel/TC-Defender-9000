@@ -32,12 +32,17 @@ class ControllerScore
         }
     }
 
-    public static function updade()
+    public static function update()
     {
         if (isset($_GET['pseudo']) && isset($_GET['score'])) {
             Model::update($_GET['pseudo'], $_GET['score']);
         } else {
             die("Erreur, nombre de donnée insuffisante");
         }
+    }
+
+    public static function cScores()
+    {
+        echo (json_encode(Model::countScores()));
     }
 }

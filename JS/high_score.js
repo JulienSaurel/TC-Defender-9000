@@ -1,6 +1,7 @@
 let tab_score;
 let low_score;
 let select_score;
+let nbScores;
 
 function myajax(stringScore, callback) {
     let url = "../php/index.php?action=" + stringScore;
@@ -29,7 +30,11 @@ function callback_score_low(req) {
 }
 
 function callback_score_select(req) {
-    select_score = JSON.parse(req.responseText);
+    select_score = JSON.parse(req.responseText).score;
+}
+
+function callback_score_count(req) {
+    nbScores = JSON.parse(req.responseText);
 }
 
 // Stocke dans tab_score la liste des 10 premier scores
@@ -51,7 +56,14 @@ function score_low() {
 
 // Stock dans score_select les stat du joueur de pseudo nick
 function score_select(nick) {
-    myajax("select&pseudo=" + nick, callback_score_select);
+    // myajax("select&pseudo=" + nick, callback_score_select);
+    let url = "../php/index.php?action=select&pseudo=" + nick;
+    let requete = new XMLHttpRequest();
+    requete.open("GET", url, false);
+    requete.addEventListener("load", function () {
+        callback_score_select(requete);
+    });
+    requete.send(null);
 }
 
 // Ajoute une nouvelle entrée dans la bdd
@@ -64,10 +76,16 @@ function score_update(nick, score) {
     myajax("update&pseudo=" + nick + "&score=" + score, null);
 }
 
+// Donne le nombre de score dans la base de donnée
+function score_count() {
+    myajax("cScores", callback_score_count);
+}
+
 // Fonction qui ajoute un score si le pseudo est inconnu sinon update
 function score_add(nick, score) {
     score_select(nick);
     let test = select_score;
+    console.log(test);
     if (!test) {
         score_new(nick, score);
     } else {
@@ -77,13 +95,14 @@ function score_add(nick, score) {
 
 // Fonction qui prend un score et l'ajoute dans la base de donnée si l'utilisateur est inconnu, sinon met à jour
 function publishScore(score, rep) {
+    score_count();
     score_low();
-    if (score > low_score) {
+    if (score > low_score || nbScores < 10) {
         if (rep != null && rep != "") {
             score_select(rep);
-            if (select_score && select_score.score < score) {
+            if (select_score && select_score < score) {
                 score_add(rep, score);
-            } else {
+            } else if (!select_score) {
                 score_add(rep, score);
             }
         }

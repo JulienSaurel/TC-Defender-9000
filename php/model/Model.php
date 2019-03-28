@@ -132,6 +132,13 @@ class Model
         return false;
     }
 
+    // Retourne le nombre de score dans la base de donnée
+    public static function countScores()
+    {
+        $score = Model::selectAllScore();
+        return count($score);
+    }
+
     // Garde le nombre d'entrée de la base de donné a 10
     public static function purge()
     {
