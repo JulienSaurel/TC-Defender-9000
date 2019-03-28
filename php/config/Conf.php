@@ -4,7 +4,7 @@ class Conf
 {
     private static $database = array(
         'hostname' => 'localhost',
-        'database' => 'combess',
+        'database' => 'tcDefender',
         'login' => 'root',
         'password' => '',
     );

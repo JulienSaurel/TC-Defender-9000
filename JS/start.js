@@ -3,7 +3,12 @@ function loadStartScreen(){
   document.body.setAttribute("overflow", "auto");
   document.getElementById("startScreen").style.display = "inline";
   document.getElementById("game").style.display = "none";
-  score_list();
+  setTimeout(function(){
+    score_list();
+    setHighScores();
+
+  }, 100);
+
 }
 
 function startButton(){

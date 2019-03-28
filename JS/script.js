@@ -1005,6 +1005,7 @@ function loadGame(){
 //fonction qui actualise les données de tous les objets du jeu
 function update(){
   if(winDetector() === true){
+    publishScore(score, pseudo);
     gameOver();
     clearInterval(interval);
     delete interval;
