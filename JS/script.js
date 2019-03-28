@@ -997,7 +997,6 @@ function gameOver(){
 function loadGame(){
   playResumeSound();
   document.getElementById("startScreen").style.display = "none";
-  document.getElementById("startButtonDiv").style.display = "none";
   document.getElementById("game").style.display = "inline";
   initialise();
   render();
@@ -1082,5 +1081,3 @@ function render(){
     draw();
   }, 10);
 }
-// initialise();
-// render();
