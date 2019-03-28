@@ -87,6 +87,7 @@ var RELOAD_TIME_COST = 50; //cout d'un niveau de reload time
 var RELOAD_TIME_MAX = 3; //nombre de points maximal dans le reload time
 var BULLET_SPEED_COST = 10; //cout d'un niveau de vitesse
 var BULLET_SPEED_MAX = 5; //nombre de points maximal dans la vitesse
+var pseudo;
 
 //waves
 var infiniteWaveTimer = 5000; //temps de recahrge de la vague infinie
@@ -111,7 +112,8 @@ function loadImages(){
 }
 
 //fonction appelée au lancement
-function initialise(){
+function initialise(playerPseudo){
+  pseudo = playerPseudo;
   resetVars();
   setCosts();
   actualiseHP();
@@ -712,6 +714,7 @@ function playWave(wn, timeInterval){
 //permet de jouer une vague en focntion d'un numéro
 function playWaveNumber(wn){
   if(wn === 5){
+    score_add(pseudo, score);
     launchWinScreen();
   }else{
     if(wn === 1){

@@ -9,37 +9,60 @@ html, body {
   font-family: "Impact";
 }
 
-#startCanvas {
-  position:absolute;
-  display: block;
-  margin: auto;
-  z-index: 1;
-}
-#canonLeft {
-  position:absolute;
-  display: block;
-  margin: auto;
-  z-index: 1;
+#playButton {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-#canonRight {
-  position:absolute;
-  display: block;
+#mainTittle {
+  width: 100%;
+}
+
+#startScreen {
   margin: auto;
-  z-index: 1;
+  width: 50%;
 }
 
-#startButtonDiv {
-  margin-top: 500px;
-  text-align: center;
-  flex-direction: column;
-  display: flex;
+#scoresTable {
+  border-collapse: collapse;
+  width: 100%;
 }
 
-#startButton {
-  width:100px;
-  opacity: 0.2;
-  z-index: 10;
+#scores {
+  margin-top: 5%;
+}
+
+#scoresTable td, #scoresTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#scoresTable tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+
+#scoresTable tr:hover {
+  background-color: #ddd;
+}
+
+#scoresTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.greyRadiusBG {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
 #gameScreen {
@@ -225,4 +248,14 @@ hr {
 
 .canonCaracs {
   display: flex;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
