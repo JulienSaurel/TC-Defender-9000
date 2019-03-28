@@ -21,6 +21,7 @@ function startButton(){
 function setHighScores(){
   score_list();
   let table = document.getElementById("scoresTable");
+  document.removeElement("tr");
   setTimeout(function(){
     tab_score.forEach(function(score){
       let tr = document.createElement("tr");
