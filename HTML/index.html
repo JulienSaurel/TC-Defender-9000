@@ -7,13 +7,26 @@
   </head>
   <body>
     <div id="startScreen">
-      <canvas id="startCanvas" width="1200" height="1200"></canvas>
-      <canvas id="canonLeft" width="600" height="600"></canvas>
-      <canvas id="canonRight" width="600" height="600"></canvas>
-    </div>
-    <div id="startButtonDiv">
-      <h1> Shoot the TC to start game</h1>
-      <img id="startButton" onclick="startButton()" class="plusButton" src="../img/plusButton.png">
+      <div class="titleDiv">
+        <img id="mainTittle" src="../img/startLogo.png">
+      </div>
+      <div class="greyRadiusBG">
+        <h2>Pseudo :</h2>
+        <form name="pseudoForm">
+          <input type="text" name="pseudo">
+          <input id="playButton" onclick="startButton()" type="button" value="PLAY">
+        </form>
+      </div>
+      <div id="scores" class="greyRadiusBG">
+        <h2>High Scores</h2>
+        <input id="scoreButton" onclick="setHighScores()" type="button" value="Reveal Scores">
+        <table id="scoresTable">
+          <tr>
+            <th>Pseudo</th>
+            <th>High Score</th>
+          </tr>
+        </table>
+      </div>
     </div>
 
     <div id="game">
@@ -147,5 +160,6 @@
   <audio autoplay loop  id="playAudio"><source src="../sounds/back_sound.mp3"></audio>
 </html>
 <script type="text/javascript" src="../JS/soundsHandler.js"></script>
+<script type="text/javascript" src="../JS/high_score.js"></script>
 <script type="text/javascript" src="../JS/script.js"></script>
 <script type="text/javascript" src="../JS/start.js"></script>

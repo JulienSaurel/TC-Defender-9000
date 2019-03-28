@@ -76,10 +76,9 @@ function score_add(nick, score) {
 }
 
 // Fonction qui prend un score et l'ajoute dans la base de donnée si l'utilisateur est inconnu, sinon met à jour
-function score(score) {
+function publishScore(score, rep) {
     score_low();
     if (score > low_score) {
-        let rep = prompt("Veuillez donner votre pseudo");
         if (rep != null && rep != "") {
             score_select(rep);
             if (select_score && select_score.score < score) {
