@@ -4,20 +4,9 @@ html, body {
   height: 100%;
   margin: 0px;
   border: 0;
-  overflow: hidden; /*  Disable scrollbars */
+  overflow:auto; /*  Disable scrollbars */
   display: block;  /* No floating content on sides */
   font-family: "Impact";
-}
-
-#scoreButton {
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 #playButton {
@@ -32,12 +21,13 @@ html, body {
 }
 
 #mainTittle {
-  width: 100%;
+  width: 30%;
 }
 
 #startScreen {
+  display: flex;
+  flex-direction: column;
   margin: auto;
-  width: 50%;
 }
 
 #scoresTable {

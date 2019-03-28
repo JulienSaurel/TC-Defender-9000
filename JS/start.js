@@ -1,9 +1,9 @@
 
 function loadStartScreen(){
+  document.body.setAttribute("overflow", "auto");
   document.getElementById("startScreen").style.display = "inline";
   document.getElementById("game").style.display = "none";
   score_list();
-  setHighScores();
 }
 
 function startButton(){
@@ -13,6 +13,7 @@ function startButton(){
   }else{
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("game").style.display = "inline";
+    document.body.setAttribute("overflow", "hidden");
     initialise(playerPseudo);
     render();
   }
@@ -37,3 +38,5 @@ function setHighScores(){
     });
   }, 100);
 }
+
+setHighScores();
