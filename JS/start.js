@@ -21,6 +21,9 @@ function startButton(){
 function setHighScores(){
   score_list();
   let table = document.getElementById("scoresTable");
+  while(table.children.length > 1){
+    table.removeChild(table.lastChild);
+  }
   setTimeout(function(){
     tab_score.forEach(function(score){
       let tr = document.createElement("tr");
@@ -31,6 +34,6 @@ function setHighScores(){
       tr.appendChild(tdpseudo);
       tr.appendChild(tdscore);
       table.appendChild(tr);
-    })
+    });
   }, 100);
 }
