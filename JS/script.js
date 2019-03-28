@@ -42,8 +42,8 @@ var bullet_damages = 1; //dégats des balles
 var bullets = Array(); //tableau contenant toutes les bullet tirées
 
 //ennemies
-var ENNEMY_WIDTH = (1 / 12) * 0.5 * axeX; //largeur d'un ennemi
-var ENNEMY_HEIGHT = (1 / 12) * 0.55 * axeY; //hauteur d'un ennemi
+var ENNEMY_WIDTH = (1 / 12) * 0.625 * axeX; //largeur d'un ennemi
+var ENNEMY_HEIGHT = (1 / 12) * 0.625 * axeY; //hauteur d'un ennemi
 var ENNEMY_SPEED = (axeX / 12) / 50; //vitesse d'un ennemi
 var ennemies = Array(); //tableau contenant tous les ennemis
 
@@ -153,7 +153,7 @@ function initialise(playerPseudo){
     clearInterval(interv);
     delete interv;
   });
-
+  replaceEnnemies();
   //réinitialisation des tableaux
   spawnables = new Array();
   ennemies = new Array();
@@ -375,8 +375,9 @@ function replaceCanon(){
 
 //fonction permettant d'actualiser les caractéristiques des ennemis après un changement de taille de l'écran
 function replaceEnnemies(){
-  ENNEMY_WIDTH = (1 / 12) * 0.625 * axeX;
-  ENNEMY_HEIGHT = (1 / 12) * 0.625 * axeY;
+
+  ENNEMY_WIDTH = (1 / 12) * 0.625 * canvas.width;
+  ENNEMY_HEIGHT = (1 / 12) * 0.625 * canvas.height;
   ENNEMY_SPEED = (axeX / 12) / 50;
   spawnables.forEach(function(ennemy){
     if(ennemy != undefined){
@@ -610,7 +611,7 @@ function bulletCollider(){
           if(bullet.active && ennemy.active){
             if(ennemy.x < bullet.x + bullet.width
               && ennemy.x + ennemy.width > bullet.x
-              && ennemy.y < bullet.y - bullet.height
+              && ennemy.y < bullet.y + bullet.height
               && ennemy.y + ennemy.height > bullet.y){
 
 

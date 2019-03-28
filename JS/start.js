@@ -6,7 +6,7 @@ function loadStartScreen(){
   setTimeout(function(){
     score_list();
     setHighScores();
-
+    loadImages();
   }, 100);
 
 }
