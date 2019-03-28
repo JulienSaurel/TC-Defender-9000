@@ -2,6 +2,8 @@
 function loadStartScreen(){
   document.getElementById("startScreen").style.display = "inline";
   document.getElementById("game").style.display = "none";
+  score_list();
+  setHighScores();
 }
 
 function startButton(){
@@ -17,12 +19,18 @@ function startButton(){
 }
 
 function setHighScores(){
-  let table = document.getElementById("scoresTable");
   score_list();
-  tab_score.forEach(function(score){
-    let tr = document.creatElement("tr");
-    let td = document.creatElement("td");
-    tr.appendChild(td);
-    table.appendChild(tr);
-  })
+  let table = document.getElementById("scoresTable");
+  setTimeout(function(){
+    tab_score.forEach(function(score){
+      let tr = document.createElement("tr");
+      let tdpseudo = document.createElement("td");
+      let tdscore = document.createElement("td");
+      tdpseudo.innerHTML = score[0];
+      tdscore.innerHTML = score[1];
+      tr.appendChild(tdpseudo);
+      tr.appendChild(tdscore);
+      table.appendChild(tr);
+    })
+  }, 100);
 }

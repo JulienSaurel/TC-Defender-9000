@@ -714,7 +714,7 @@ function playWave(wn, timeInterval){
 //permet de jouer une vague en focntion d'un numéro
 function playWaveNumber(wn){
   if(wn === 5){
-    score_add(pseudo, score);
+    publishScore(score, pseudo);
     launchWinScreen();
   }else{
     if(wn === 1){
